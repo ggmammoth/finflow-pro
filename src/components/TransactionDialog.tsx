@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateTransaction, useUpdateTransaction, Transaction } from '@/hooks/useFinanceData';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),
@@ -30,6 +31,7 @@ interface Props {
 }
 
 const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTransaction }) => {
+  const { t } = useTranslation();
   const { data: categories } = useCategories(type);
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
@@ -44,20 +46,15 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
       category_id: editTransaction.category_id || '',
       notes: editTransaction.notes || '',
       payment_method: editTransaction.payment_method || '',
-    } : {
-      date: new Date().toISOString().split('T')[0],
-    },
+    } : { date: new Date().toISOString().split('T')[0] },
   });
 
   React.useEffect(() => {
     if (editTransaction) {
       reset({
-        title: editTransaction.title,
-        amount: String(editTransaction.amount),
-        date: editTransaction.date,
-        category_id: editTransaction.category_id || '',
-        notes: editTransaction.notes || '',
-        payment_method: editTransaction.payment_method || '',
+        title: editTransaction.title, amount: String(editTransaction.amount),
+        date: editTransaction.date, category_id: editTransaction.category_id || '',
+        notes: editTransaction.notes || '', payment_method: editTransaction.payment_method || '',
       });
     } else {
       reset({ date: new Date().toISOString().split('T')[0] });
@@ -66,88 +63,76 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
 
   const onSubmit = async (data: FormData) => {
     const payload = {
-      type,
-      title: data.title,
-      amount: parseFloat(data.amount),
-      date: data.date,
-      category_id: data.category_id || null,
-      notes: data.notes || null,
-      payment_method: data.payment_method || null,
-      is_recurring: false,
-      recurring_payment_id: null,
+      type, title: data.title, amount: parseFloat(data.amount), date: data.date,
+      category_id: data.category_id || null, notes: data.notes || null,
+      payment_method: data.payment_method || null, is_recurring: false, recurring_payment_id: null,
     };
-
-    if (isEditing) {
-      await updateMutation.mutateAsync({ id: editTransaction!.id, ...payload });
-    } else {
-      await createMutation.mutateAsync(payload);
-    }
+    if (isEditing) await updateMutation.mutateAsync({ id: editTransaction!.id, ...payload });
+    else await createMutation.mutateAsync(payload);
     reset();
     onOpenChange(false);
   };
 
   const loading = createMutation.isPending || updateMutation.isPending;
+  const dialogTitle = isEditing
+    ? (type === 'income' ? t('dialog.editIncome') : t('dialog.editExpense'))
+    : (type === 'income' ? t('dialog.addIncome') : t('dialog.addExpense'));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-display">
-            {isEditing ? 'Edit' : 'Add'} {type === 'income' ? 'Income' : 'Expense'}
-          </DialogTitle>
+          <DialogTitle className="font-display">{dialogTitle}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label>Title</Label>
-            <Input {...register('title')} placeholder="e.g. Salary payment" />
+            <Label>{t('common.title')}</Label>
+            <Input {...register('title')} placeholder={t('dialog.titlePlaceholder')} />
             {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Amount</Label>
+              <Label>{t('common.amount')}</Label>
               <Input {...register('amount')} type="number" step="0.01" min="0.01" placeholder="0.00" />
-              {errors.amount && <p className="text-xs text-destructive">{errors.amount.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label>Date</Label>
+              <Label>{t('common.date')}</Label>
               <Input {...register('date')} type="date" />
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Category</Label>
+            <Label>{t('common.category')}</Label>
             <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
-              <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
               <SelectContent>
-                {categories?.map(c => (
-                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                ))}
+                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           {type === 'expense' && (
             <div className="space-y-2">
-              <Label>Payment Method</Label>
+              <Label>{t('dialog.paymentMethod')}</Label>
               <Select onValueChange={(v) => setValue('payment_method', v)} defaultValue={editTransaction?.payment_method || ''}>
-                <SelectTrigger><SelectValue placeholder="Select method" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder={t('dialog.selectMethod')} /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cash">Cash</SelectItem>
-                  <SelectItem value="credit_card">Credit Card</SelectItem>
-                  <SelectItem value="debit_card">Debit Card</SelectItem>
-                  <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="cash">{t('dialog.cash')}</SelectItem>
+                  <SelectItem value="credit_card">{t('dialog.creditCard')}</SelectItem>
+                  <SelectItem value="debit_card">{t('dialog.debitCard')}</SelectItem>
+                  <SelectItem value="bank_transfer">{t('dialog.bankTransfer')}</SelectItem>
+                  <SelectItem value="other">{t('dialog.other')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           )}
           <div className="space-y-2">
-            <Label>Notes</Label>
-            <Textarea {...register('notes')} placeholder="Optional notes..." rows={2} />
+            <Label>{t('common.notes')}</Label>
+            <Textarea {...register('notes')} placeholder={t('dialog.optionalNotes')} rows={2} />
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>{t('common.cancel')}</Button>
             <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isEditing ? 'Update' : 'Add'}
+              {isEditing ? t('common.update') : t('common.add')}
             </Button>
           </div>
         </form>

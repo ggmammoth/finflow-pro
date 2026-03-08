@@ -8,13 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { format, parseISO, isWithinInterval } from 'date-fns';
 import { Loader2, TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Reports = () => {
+  const { t } = useTranslation();
   const { data: transactions, isLoading } = useTransactions();
   const { data: categories } = useCategories();
   const [startDate, setStartDate] = useState(() => {
-    const d = new Date();
-    d.setMonth(d.getMonth() - 5);
+    const d = new Date(); d.setMonth(d.getMonth() - 5);
     return d.toISOString().split('T')[0];
   });
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
@@ -22,25 +23,25 @@ const Reports = () => {
 
   const filtered = useMemo(() => {
     if (!transactions) return [];
-    return transactions.filter(t => {
-      const d = parseISO(t.date);
+    return transactions.filter(tx => {
+      const d = parseISO(tx.date);
       const inRange = isWithinInterval(d, { start: parseISO(startDate), end: parseISO(endDate) });
-      const inCat = categoryFilter === 'all' || t.category_id === categoryFilter;
+      const inCat = categoryFilter === 'all' || tx.category_id === categoryFilter;
       return inRange && inCat;
     });
   }, [transactions, startDate, endDate, categoryFilter]);
 
-  const totalIncome = filtered.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
-  const totalExpenses = filtered.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
+  const totalIncome = filtered.filter(tx => tx.type === 'income').reduce((s, tx) => s + Number(tx.amount), 0);
+  const totalExpenses = filtered.filter(tx => tx.type === 'expense').reduce((s, tx) => s + Number(tx.amount), 0);
   const net = totalIncome - totalExpenses;
 
   const monthlyComparison = useMemo(() => {
     const months: Record<string, { month: string; income: number; expense: number }> = {};
-    filtered.forEach(t => {
-      const m = format(parseISO(t.date), 'MMM yyyy');
+    filtered.forEach(tx => {
+      const m = format(parseISO(tx.date), 'MMM yyyy');
       if (!months[m]) months[m] = { month: m, income: 0, expense: 0 };
-      if (t.type === 'income') months[m].income += Number(t.amount);
-      else months[m].expense += Number(t.amount);
+      if (tx.type === 'income') months[m].income += Number(tx.amount);
+      else months[m].expense += Number(tx.amount);
     });
     return Object.values(months).reverse();
   }, [filtered]);
@@ -54,27 +55,26 @@ const Reports = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">Reports</h1>
-        <p className="mt-1 text-muted-foreground">Analyze your financial data with filters</p>
+        <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">{t('reports.title')}</h1>
+        <p className="mt-1 text-muted-foreground">{t('reports.subtitle')}</p>
       </div>
 
-      {/* Filters */}
       <Card className="card-premium border-0">
         <CardContent className="grid gap-4 p-5 sm:grid-cols-3">
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Start Date</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('reports.startDate')}</Label>
             <Input type="date" className="bg-secondary/50 border-border/60" value={startDate} onChange={e => setStartDate(e.target.value)} />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">End Date</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('reports.endDate')}</Label>
             <Input type="date" className="bg-secondary/50 border-border/60" value={endDate} onChange={e => setEndDate(e.target.value)} />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.category')}</Label>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="bg-secondary/50 border-border/60"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t('reports.allCategories')}</SelectItem>
                 {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -82,15 +82,12 @@ const Reports = () => {
         </CardContent>
       </Card>
 
-      {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="card-premium border-0">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <p className="text-[0.8125rem] font-medium text-muted-foreground">Total Income</p>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-income-light">
-                <ArrowDownCircle className="h-4 w-4 text-income" />
-              </div>
+              <p className="text-[0.8125rem] font-medium text-muted-foreground">{t('reports.totalIncome')}</p>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-income-light"><ArrowDownCircle className="h-4 w-4 text-income" /></div>
             </div>
             <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-income">{fmt(totalIncome)}</p>
           </CardContent>
@@ -98,10 +95,8 @@ const Reports = () => {
         <Card className="card-premium border-0">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <p className="text-[0.8125rem] font-medium text-muted-foreground">Total Expenses</p>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-expense-light">
-                <ArrowUpCircle className="h-4 w-4 text-expense" />
-              </div>
+              <p className="text-[0.8125rem] font-medium text-muted-foreground">{t('reports.totalExpenses')}</p>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-expense-light"><ArrowUpCircle className="h-4 w-4 text-expense" /></div>
             </div>
             <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-expense">{fmt(totalExpenses)}</p>
           </CardContent>
@@ -109,7 +104,7 @@ const Reports = () => {
         <Card className="card-premium border-0">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <p className="text-[0.8125rem] font-medium text-muted-foreground">Net Balance</p>
+              <p className="text-[0.8125rem] font-medium text-muted-foreground">{t('reports.netBalance')}</p>
               <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${net >= 0 ? 'bg-income-light' : 'bg-expense-light'}`}>
                 {net >= 0 ? <TrendingUp className="h-4 w-4 text-income" /> : <TrendingDown className="h-4 w-4 text-expense" />}
               </div>
@@ -119,11 +114,10 @@ const Reports = () => {
         </Card>
       </div>
 
-      {/* Chart */}
       <Card className="card-premium border-0">
         <CardHeader className="pb-2">
-          <CardTitle className="font-display text-base font-bold">Monthly Comparison</CardTitle>
-          <CardDescription>Income vs expenses over selected period</CardDescription>
+          <CardTitle className="font-display text-base font-bold">{t('reports.monthlyComparison')}</CardTitle>
+          <CardDescription>{t('reports.monthlyCompDesc')}</CardDescription>
         </CardHeader>
         <CardContent className="pb-4">
           {monthlyComparison.length > 0 ? (
@@ -134,20 +128,19 @@ const Reports = () => {
                 <YAxis fontSize={11} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
                 <Tooltip formatter={(value: number) => fmt(value)} />
                 <Legend />
-                <Bar dataKey="income" fill="hsl(var(--income))" name="Income" radius={[6, 6, 0, 0]} maxBarSize={40} />
-                <Bar dataKey="expense" fill="hsl(var(--expense))" name="Expenses" radius={[6, 6, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="income" fill="hsl(var(--income))" name={t('nav.income')} radius={[6, 6, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="expense" fill="hsl(var(--expense))" name={t('nav.expenses')} radius={[6, 6, 0, 0]} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[350px] items-center justify-center text-muted-foreground">No data for selected period</div>
+            <div className="flex h-[350px] items-center justify-center text-muted-foreground">{t('reports.noDataPeriod')}</div>
           )}
         </CardContent>
       </Card>
 
-      {/* Transaction List */}
       <Card className="card-premium border-0">
         <CardHeader className="pb-3">
-          <CardTitle className="font-display text-base font-bold">Transactions ({filtered.length})</CardTitle>
+          <CardTitle className="font-display text-base font-bold">{t('common.transaction')}s ({filtered.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {filtered.length > 0 ? (
@@ -155,26 +148,24 @@ const Reports = () => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Transaction</th>
-                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Type</th>
-                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</th>
-                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
-                    <th className="px-6 pb-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount</th>
+                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.transaction')}</th>
+                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.type')}</th>
+                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.category')}</th>
+                    <th className="px-6 pb-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.date')}</th>
+                    <th className="px-6 pb-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.amount')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map(t => (
-                    <tr key={t.id} className="border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors">
-                      <td className="px-6 py-3 font-medium">{t.title}</td>
+                  {filtered.map(tx => (
+                    <tr key={tx.id} className="border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors">
+                      <td className="px-6 py-3 font-medium">{tx.title}</td>
                       <td className="px-6 py-3">
-                        <Badge variant={t.type === 'income' ? 'default' : 'destructive'} className="text-[0.6875rem] capitalize">
-                          {t.type}
-                        </Badge>
+                        <Badge variant={tx.type === 'income' ? 'default' : 'destructive'} className="text-[0.6875rem] capitalize">{t(`dialog.${tx.type}`)}</Badge>
                       </td>
-                      <td className="px-6 py-3 text-muted-foreground">{t.categories?.name || '—'}</td>
-                      <td className="px-6 py-3 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
-                      <td className={`px-6 py-3 text-right font-bold tabular-nums ${t.type === 'income' ? 'text-income' : 'text-expense'}`}>
-                        {t.type === 'income' ? '+' : '−'}{fmt(Number(t.amount))}
+                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.name || '—'}</td>
+                      <td className="px-6 py-3 text-muted-foreground">{format(parseISO(tx.date), 'MMM d, yyyy')}</td>
+                      <td className={`px-6 py-3 text-right font-bold tabular-nums ${tx.type === 'income' ? 'text-income' : 'text-expense'}`}>
+                        {tx.type === 'income' ? '+' : '−'}{fmt(Number(tx.amount))}
                       </td>
                     </tr>
                   ))}
@@ -182,7 +173,7 @@ const Reports = () => {
               </table>
             </div>
           ) : (
-            <p className="py-12 text-center text-muted-foreground">No transactions in this period</p>
+            <p className="py-12 text-center text-muted-foreground">{t('reports.noTransPeriod')}</p>
           )}
         </CardContent>
       </Card>

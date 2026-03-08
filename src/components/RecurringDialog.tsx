@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateRecurring, useUpdateRecurring, RecurringPayment } from '@/hooks/useFinanceData';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),
@@ -31,6 +32,7 @@ interface Props {
 }
 
 const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring }) => {
+  const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<string>(editRecurring?.type || 'expense');
   const { data: categories } = useCategories(selectedType);
   const createMutation = useCreateRecurring();
@@ -40,33 +42,21 @@ const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring })
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: editRecurring ? {
-      title: editRecurring.title,
-      amount: String(editRecurring.amount),
-      type: editRecurring.type as 'income' | 'expense',
-      frequency: editRecurring.frequency as any,
-      next_due_date: editRecurring.next_due_date,
-      category_id: editRecurring.category_id || '',
-      notes: editRecurring.notes || '',
-      payment_method: editRecurring.payment_method || '',
-    } : {
-      type: 'expense',
-      frequency: 'monthly',
-      next_due_date: new Date().toISOString().split('T')[0],
-    },
+      title: editRecurring.title, amount: String(editRecurring.amount),
+      type: editRecurring.type as 'income' | 'expense', frequency: editRecurring.frequency as any,
+      next_due_date: editRecurring.next_due_date, category_id: editRecurring.category_id || '',
+      notes: editRecurring.notes || '', payment_method: editRecurring.payment_method || '',
+    } : { type: 'expense', frequency: 'monthly', next_due_date: new Date().toISOString().split('T')[0] },
   });
 
   React.useEffect(() => {
     if (editRecurring) {
       setSelectedType(editRecurring.type);
       reset({
-        title: editRecurring.title,
-        amount: String(editRecurring.amount),
-        type: editRecurring.type as 'income' | 'expense',
-        frequency: editRecurring.frequency as any,
-        next_due_date: editRecurring.next_due_date,
-        category_id: editRecurring.category_id || '',
-        notes: editRecurring.notes || '',
-        payment_method: editRecurring.payment_method || '',
+        title: editRecurring.title, amount: String(editRecurring.amount),
+        type: editRecurring.type as 'income' | 'expense', frequency: editRecurring.frequency as any,
+        next_due_date: editRecurring.next_due_date, category_id: editRecurring.category_id || '',
+        notes: editRecurring.notes || '', payment_method: editRecurring.payment_method || '',
       });
     } else {
       reset({ type: 'expense', frequency: 'monthly', next_due_date: new Date().toISOString().split('T')[0] });
@@ -76,22 +66,13 @@ const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring })
 
   const onSubmit = async (data: FormData) => {
     const payload = {
-      title: data.title,
-      amount: parseFloat(data.amount),
-      type: data.type,
-      frequency: data.frequency,
-      next_due_date: data.next_due_date,
-      category_id: data.category_id || null,
-      notes: data.notes || null,
-      payment_method: data.payment_method || null,
-      is_active: true,
+      title: data.title, amount: parseFloat(data.amount), type: data.type,
+      frequency: data.frequency, next_due_date: data.next_due_date,
+      category_id: data.category_id || null, notes: data.notes || null,
+      payment_method: data.payment_method || null, is_active: true,
     };
-
-    if (isEditing) {
-      await updateMutation.mutateAsync({ id: editRecurring!.id, ...payload });
-    } else {
-      await createMutation.mutateAsync(payload);
-    }
+    if (isEditing) await updateMutation.mutateAsync({ id: editRecurring!.id, ...payload });
+    else await createMutation.mutateAsync(payload);
     reset();
     onOpenChange(false);
   };
@@ -103,69 +84,67 @@ const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring })
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="font-display">
-            {isEditing ? 'Edit' : 'Add'} Recurring Payment
+            {isEditing ? t('dialog.editRecurring') : t('dialog.addRecurring')}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label>Title</Label>
-            <Input {...register('title')} placeholder="e.g. Netflix subscription" />
+            <Label>{t('common.title')}</Label>
+            <Input {...register('title')} placeholder={t('dialog.recurringPlaceholder')} />
             {errors.title && <p className="text-xs text-destructive">{errors.title.message}</p>}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Amount</Label>
+              <Label>{t('common.amount')}</Label>
               <Input {...register('amount')} type="number" step="0.01" min="0.01" placeholder="0.00" />
             </div>
             <div className="space-y-2">
-              <Label>Type</Label>
+              <Label>{t('common.type')}</Label>
               <Select onValueChange={(v) => { setValue('type', v as any); setSelectedType(v); }} defaultValue={editRecurring?.type || 'expense'}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="income">Income</SelectItem>
-                  <SelectItem value="expense">Expense</SelectItem>
+                  <SelectItem value="income">{t('dialog.income')}</SelectItem>
+                  <SelectItem value="expense">{t('dialog.expense')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Frequency</Label>
+              <Label>{t('dialog.frequency')}</Label>
               <Select onValueChange={(v) => setValue('frequency', v as any)} defaultValue={editRecurring?.frequency || 'monthly'}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="yearly">Yearly</SelectItem>
+                  <SelectItem value="daily">{t('dialog.daily')}</SelectItem>
+                  <SelectItem value="weekly">{t('dialog.weekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('dialog.monthly')}</SelectItem>
+                  <SelectItem value="yearly">{t('dialog.yearly')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Next Due Date</Label>
+              <Label>{t('dialog.nextDueDate')}</Label>
               <Input {...register('next_due_date')} type="date" />
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Category</Label>
+            <Label>{t('common.category')}</Label>
             <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editRecurring?.category_id || ''}>
-              <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
               <SelectContent>
-                {categories?.map(c => (
-                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                ))}
+                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Notes</Label>
-            <Textarea {...register('notes')} placeholder="Optional notes..." rows={2} />
+            <Label>{t('common.notes')}</Label>
+            <Textarea {...register('notes')} placeholder={t('dialog.optionalNotes')} rows={2} />
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>{t('common.cancel')}</Button>
             <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isEditing ? 'Update' : 'Add'}
+              {isEditing ? t('common.update') : t('common.add')}
             </Button>
           </div>
         </form>

@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, TrendingUp, Mail } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const ForgotPassword = () => {
   const [sent, setSent] = useState(false);
   const { resetPassword } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,11 +39,11 @@ const ForgotPassword = () => {
               <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
                 <Mail className="h-7 w-7 text-primary" />
               </div>
-              <CardTitle className="font-display text-2xl font-extrabold tracking-tight">Check your email</CardTitle>
-              <CardDescription className="mt-1">We've sent a password reset link to <span className="font-medium text-foreground">{email}</span></CardDescription>
+              <CardTitle className="font-display text-2xl font-extrabold tracking-tight">{t('auth.checkYourEmail')}</CardTitle>
+              <CardDescription className="mt-1">{t('auth.resetSentDesc')} <span className="font-medium text-foreground">{email}</span></CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
-              <Link to="/login" className="text-sm font-medium text-primary hover:underline">Back to login</Link>
+              <Link to="/login" className="text-sm font-medium text-primary hover:underline">{t('auth.backToLogin')}</Link>
             </CardFooter>
           </Card>
         </div>
@@ -57,22 +59,22 @@ const ForgotPassword = () => {
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
               <TrendingUp className="h-7 w-7 text-primary-foreground" />
             </div>
-            <CardTitle className="font-display text-2xl font-extrabold tracking-tight">Reset password</CardTitle>
-            <CardDescription className="mt-1">Enter your email to receive a reset link</CardDescription>
+            <CardTitle className="font-display text-2xl font-extrabold tracking-tight">{t('auth.resetPassword')}</CardTitle>
+            <CardDescription className="mt-1">{t('auth.resetDesc')}</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</Label>
+                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.email')}</Label>
                 <Input id="email" type="email" placeholder="you@example.com" className="h-11" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4 pt-2">
               <Button type="submit" className="h-11 w-full text-base" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Send reset link
+                {t('auth.sendResetLink')}
               </Button>
-              <Link to="/login" className="text-sm text-muted-foreground hover:underline">Back to login</Link>
+              <Link to="/login" className="text-sm text-muted-foreground hover:underline">{t('auth.backToLogin')}</Link>
             </CardFooter>
           </form>
         </Card>
