@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import {
   LayoutDashboard, ArrowDownCircle, ArrowUpCircle, RefreshCw,
@@ -11,23 +12,23 @@ import {
 } from '@/components/ui/sidebar';
 
 const navItems = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { title: 'Income', url: '/income', icon: ArrowDownCircle },
-  { title: 'Expenses', url: '/expenses', icon: ArrowUpCircle },
-  { title: 'Recurring', url: '/recurring', icon: RefreshCw },
-  { title: 'Reports', url: '/reports', icon: BarChart3 },
-  { title: 'Settings', url: '/settings', icon: Settings },
+  { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
+  { titleKey: 'nav.income', url: '/income', icon: ArrowDownCircle },
+  { titleKey: 'nav.expenses', url: '/expenses', icon: ArrowUpCircle },
+  { titleKey: 'nav.recurring', url: '/recurring', icon: RefreshCw },
+  { titleKey: 'nav.reports', url: '/reports', icon: BarChart3 },
+  { titleKey: 'nav.settings', url: '/settings', icon: Settings },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const location = useLocation();
+  const { t } = useTranslation();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="py-2">
-        {/* Logo */}
         <div className={`flex items-center gap-2.5 px-5 py-5 ${collapsed ? 'justify-center px-3' : ''}`}>
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
             <TrendingUp className="h-4 w-4 text-sidebar-primary-foreground" />
@@ -41,7 +42,6 @@ export function AppSidebar() {
 
         <div className="mx-4 mb-3 border-b border-sidebar-border" />
 
-        {/* Navigation */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-0.5 px-2">
@@ -49,7 +49,7 @@ export function AppSidebar() {
                 const isActive = location.pathname === item.url ||
                   (item.url !== '/dashboard' && location.pathname.startsWith(item.url));
                 return (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.titleKey}>
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}
@@ -58,7 +58,7 @@ export function AppSidebar() {
                         activeClassName="bg-sidebar-accent text-sidebar-primary"
                       >
                         <item.icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-sidebar-primary' : ''}`} />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span>{t(item.titleKey)}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

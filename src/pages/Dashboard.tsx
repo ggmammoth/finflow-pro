@@ -7,19 +7,16 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isBefore } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const CHART_COLORS = [
-  'hsl(var(--chart-1))',
-  'hsl(var(--chart-2))',
-  'hsl(var(--chart-3))',
-  'hsl(var(--chart-4))',
-  'hsl(var(--chart-5))',
-  'hsl(152 50% 50%)',
-  'hsl(4 60% 58%)',
-  'hsl(200 65% 55%)',
+  'hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(152 50% 50%)',
+  'hsl(4 60% 58%)', 'hsl(200 65% 55%)',
 ];
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { data: transactions, isLoading: loadingTx } = useTransactions();
   const { data: recurring, isLoading: loadingRec } = useRecurringPayments();
 
@@ -29,9 +26,7 @@ const Dashboard = () => {
 
   const monthlyData = useMemo(() => {
     if (!transactions) return { income: 0, expenses: 0, balance: 0 };
-    const monthTx = transactions.filter(t =>
-      isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd })
-    );
+    const monthTx = transactions.filter(t => isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }));
     const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
     const expenses = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
     return { income, expenses, balance: income - expenses };
@@ -83,16 +78,14 @@ const Dashboard = () => {
     return points.slice(-30);
   }, [transactions]);
 
-  const recentTransactions = useMemo(() => {
-    return (transactions || []).slice(0, 6);
-  }, [transactions]);
+  const recentTransactions = useMemo(() => (transactions || []).slice(0, 6), [transactions]);
 
   if (loadingTx || loadingRec) {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
           <Loader2 className="mx-auto h-7 w-7 animate-spin text-primary" />
-          <p className="mt-3 text-sm text-muted-foreground">Loading your finances...</p>
+          <p className="mt-3 text-sm text-muted-foreground">{t('dashboard.loadingFinances')}</p>
         </div>
       </div>
     );
@@ -103,59 +96,51 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="font-display text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="font-display text-2xl font-bold tracking-tight">{t('dashboard.title')}</h1>
         <p className="text-sm text-muted-foreground">
-          Financial overview for <span className="font-medium text-foreground">{format(now, 'MMMM yyyy')}</span>
+          {t('dashboard.financialOverview')} <span className="font-medium text-foreground">{format(now, 'MMMM yyyy')}</span>
         </p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-stagger">
-        {/* Income Card */}
         <Card className="card-premium stat-card-income bg-card">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Income</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.totalIncome')}</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-income-light">
                 <ArrowDownCircle className="h-4 w-4 text-income" />
               </div>
             </div>
-            <p className="mt-3 font-display text-2xl font-bold tracking-tight text-income">
-              +{fmt(monthlyData.income)}
-            </p>
+            <p className="mt-3 font-display text-2xl font-bold tracking-tight text-income">+{fmt(monthlyData.income)}</p>
             <div className="mt-2 flex items-center gap-1">
               <TrendingUp className="h-3 w-3 text-income" />
-              <span className="text-xs text-muted-foreground">This month</span>
+              <span className="text-xs text-muted-foreground">{t('common.thisMonth')}</span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Expenses Card */}
         <Card className="card-premium stat-card-expense bg-card">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Expenses</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.totalExpenses')}</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-expense-light">
                 <ArrowUpCircle className="h-4 w-4 text-expense" />
               </div>
             </div>
-            <p className="mt-3 font-display text-2xl font-bold tracking-tight text-expense">
-              −{fmt(monthlyData.expenses)}
-            </p>
+            <p className="mt-3 font-display text-2xl font-bold tracking-tight text-expense">−{fmt(monthlyData.expenses)}</p>
             <div className="mt-2 flex items-center gap-1">
               <TrendingDown className="h-3 w-3 text-expense" />
-              <span className="text-xs text-muted-foreground">This month</span>
+              <span className="text-xs text-muted-foreground">{t('common.thisMonth')}</span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Balance Card */}
         <Card className="card-premium stat-card-balance bg-card">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Net Balance</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.netBalance')}</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
                 <Wallet className="h-4 w-4 text-primary" />
               </div>
@@ -165,30 +150,29 @@ const Dashboard = () => {
             </p>
             <div className="mt-2 flex items-center gap-1">
               {monthlyData.balance >= 0 ? <TrendingUp className="h-3 w-3 text-income" /> : <TrendingDown className="h-3 w-3 text-expense" />}
-              <span className="text-xs text-muted-foreground">Savings rate {monthlyData.income > 0 ? Math.round((monthlyData.balance / monthlyData.income) * 100) : 0}%</span>
+              <span className="text-xs text-muted-foreground">{t('dashboard.savingsRate')} {monthlyData.income > 0 ? Math.round((monthlyData.balance / monthlyData.income) * 100) : 0}%</span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Recurring Card */}
         <Card className="card-premium stat-card-recurring bg-card">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Recurring</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.recurring')}</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-recurring-light">
                 <RefreshCw className="h-4 w-4 text-recurring" />
               </div>
             </div>
             <p className="mt-3 font-display text-2xl font-bold tracking-tight">
-              {upcomingRecurring.length} <span className="text-base font-semibold text-muted-foreground">active</span>
+              {upcomingRecurring.length} <span className="text-base font-semibold text-muted-foreground">{t('common.active')}</span>
             </p>
             <div className="mt-2 flex items-center gap-1">
               {overdueCount > 0 ? (
-                <Badge variant="destructive" className="h-5 text-[0.625rem] px-1.5">{overdueCount} overdue</Badge>
+                <Badge variant="destructive" className="h-5 text-[0.625rem] px-1.5">{overdueCount} {t('common.overdue').toLowerCase()}</Badge>
               ) : (
                 <>
                   <Zap className="h-3 w-3 text-recurring" />
-                  <span className="text-xs text-muted-foreground">All on schedule</span>
+                  <span className="text-xs text-muted-foreground">{t('common.allOnSchedule')}</span>
                 </>
               )}
             </div>
@@ -196,23 +180,18 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Charts Row */}
+      {/* Charts */}
       <div className="grid gap-5 lg:grid-cols-7">
-        {/* Income vs Expenses */}
         <Card className="card-premium lg:col-span-4">
           <CardHeader className="pb-1">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-sm font-semibold">Income vs Expenses</CardTitle>
-                <CardDescription className="text-xs">Monthly comparison</CardDescription>
+                <CardTitle className="text-sm font-semibold">{t('dashboard.incomeVsExpenses')}</CardTitle>
+                <CardDescription className="text-xs">{t('dashboard.monthlyComparison')}</CardDescription>
               </div>
               <div className="flex gap-4 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-income" /> Income
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-expense" /> Expenses
-                </span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-income" /> {t('dashboard.totalIncome')}</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-expense" /> {t('dashboard.totalExpenses')}</span>
               </div>
             </div>
           </CardHeader>
@@ -229,35 +208,23 @@ const Dashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <EmptyChart message="Add transactions to see comparison" />
+              <EmptyChart message={t('dashboard.addTxToSee')} />
             )}
           </CardContent>
         </Card>
 
-        {/* Spending by Category */}
         <Card className="card-premium lg:col-span-3">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-semibold">Spending by Category</CardTitle>
-            <CardDescription className="text-xs">This month's breakdown</CardDescription>
+            <CardTitle className="text-sm font-semibold">{t('dashboard.spendingByCategory')}</CardTitle>
+            <CardDescription className="text-xs">{t('dashboard.thisMonthBreakdown')}</CardDescription>
           </CardHeader>
           <CardContent className="pb-3 pt-2">
             {categoryChart.length > 0 ? (
               <div>
                 <ResponsiveContainer width="100%" height={180}>
                   <PieChart>
-                    <Pie
-                      data={categoryChart}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={78}
-                      dataKey="value"
-                      strokeWidth={2}
-                      stroke="hsl(var(--card))"
-                    >
-                      {categoryChart.map((_, i) => (
-                        <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
-                      ))}
+                    <Pie data={categoryChart} cx="50%" cy="50%" innerRadius={50} outerRadius={78} dataKey="value" strokeWidth={2} stroke="hsl(var(--card))">
+                      {categoryChart.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                     </Pie>
                     <Tooltip formatter={(value: number) => fmtFull(value)} />
                   </PieChart>
@@ -278,7 +245,7 @@ const Dashboard = () => {
                 </div>
               </div>
             ) : (
-              <EmptyChart message="No expenses this month" />
+              <EmptyChart message={t('dashboard.noExpensesMonth')} />
             )}
           </CardContent>
         </Card>
@@ -288,8 +255,8 @@ const Dashboard = () => {
       <div className="grid gap-5 lg:grid-cols-5">
         <Card className="card-premium lg:col-span-3">
           <CardHeader className="pb-1">
-            <CardTitle className="text-sm font-semibold">Cash Flow Trend</CardTitle>
-            <CardDescription className="text-xs">Running balance over time</CardDescription>
+            <CardTitle className="text-sm font-semibold">{t('dashboard.cashFlowTrend')}</CardTitle>
+            <CardDescription className="text-xs">{t('dashboard.runningBalance')}</CardDescription>
           </CardHeader>
           <CardContent className="pb-3 pt-2">
             {cashFlowChart.length > 0 ? (
@@ -309,22 +276,21 @@ const Dashboard = () => {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <EmptyChart message="Start adding transactions to see cash flow" />
+              <EmptyChart message={t('dashboard.startAddingCashFlow')} />
             )}
           </CardContent>
         </Card>
 
-        {/* Upcoming Payments */}
         <Card className="card-premium lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-sm font-semibold">Upcoming Payments</CardTitle>
-                <CardDescription className="text-xs">Next recurring charges</CardDescription>
+                <CardTitle className="text-sm font-semibold">{t('dashboard.upcomingPayments')}</CardTitle>
+                <CardDescription className="text-xs">{t('dashboard.nextRecurring')}</CardDescription>
               </div>
               <Link to="/recurring">
                 <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs text-muted-foreground hover:text-primary">
-                  View all <ArrowRight className="h-3 w-3" />
+                  {t('common.viewAll')} <ArrowRight className="h-3 w-3" />
                 </Button>
               </Link>
             </div>
@@ -333,23 +299,16 @@ const Dashboard = () => {
             {upcomingRecurring.length > 0 ? upcomingRecurring.map(r => {
               const isOverdue = isBefore(parseISO(r.next_due_date), now);
               return (
-                <div
-                  key={r.id}
-                  className={`flex items-center justify-between rounded-lg p-3 transition-colors ${
-                    isOverdue ? 'bg-expense-light border border-expense/15' : 'bg-secondary/40 hover:bg-secondary/70'
-                  }`}
-                >
+                <div key={r.id} className={`flex items-center justify-between rounded-lg p-3 transition-colors ${isOverdue ? 'bg-expense-light border border-expense/15' : 'bg-secondary/40 hover:bg-secondary/70'}`}>
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                      r.type === 'expense' ? 'bg-expense-light' : 'bg-income-light'
-                    }`}>
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${r.type === 'expense' ? 'bg-expense-light' : 'bg-income-light'}`}>
                       <RefreshCw className={`h-3.5 w-3.5 ${r.type === 'expense' ? 'text-expense' : 'text-income'}`} />
                     </div>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">{r.title}</p>
                       <p className="text-[0.6875rem] text-muted-foreground">
                         {format(parseISO(r.next_due_date), 'MMM d')}
-                        {isOverdue && <span className="ml-1 text-expense font-medium">· Overdue</span>}
+                        {isOverdue && <span className="ml-1 text-expense font-medium">· {t('common.overdue')}</span>}
                       </p>
                     </div>
                   </div>
@@ -363,8 +322,8 @@ const Dashboard = () => {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary">
                   <RefreshCw className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <p className="mt-2.5 text-sm text-muted-foreground">No upcoming payments</p>
-                <p className="mt-0.5 text-xs text-muted-foreground/70">Track bills & subscriptions</p>
+                <p className="mt-2.5 text-sm text-muted-foreground">{t('dashboard.noUpcoming')}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground/70">{t('dashboard.trackBills')}</p>
               </div>
             )}
           </CardContent>
@@ -376,18 +335,18 @@ const Dashboard = () => {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-sm font-semibold">Recent Transactions</CardTitle>
-              <CardDescription className="text-xs">Latest financial activity</CardDescription>
+              <CardTitle className="text-sm font-semibold">{t('dashboard.recentTransactions')}</CardTitle>
+              <CardDescription className="text-xs">{t('dashboard.latestActivity')}</CardDescription>
             </div>
             <div className="flex gap-2">
               <Link to="/income">
                 <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-income/20 text-income hover:bg-income-light hover:text-income">
-                  <ArrowDownCircle className="h-3 w-3" /> Income
+                  <ArrowDownCircle className="h-3 w-3" /> {t('nav.income')}
                 </Button>
               </Link>
               <Link to="/expenses">
                 <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-expense/20 text-expense hover:bg-expense-light hover:text-expense">
-                  <ArrowUpCircle className="h-3 w-3" /> Expenses
+                  <ArrowUpCircle className="h-3 w-3" /> {t('nav.expenses')}
                 </Button>
               </Link>
             </div>
@@ -396,27 +355,20 @@ const Dashboard = () => {
         <CardContent>
           {recentTransactions.length > 0 ? (
             <div className="space-y-1">
-              {recentTransactions.map((t) => (
-                <div key={t.id} className="flex items-center gap-3 rounded-lg p-2.5 transition-colors hover:bg-secondary/40">
-                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                    t.type === 'income' ? 'bg-income-light' : 'bg-expense-light'
-                  }`}>
-                    {t.type === 'income'
-                      ? <ArrowDownCircle className="h-4 w-4 text-income" />
-                      : <ArrowUpCircle className="h-4 w-4 text-expense" />
-                    }
+              {recentTransactions.map((tx) => (
+                <div key={tx.id} className="flex items-center gap-3 rounded-lg p-2.5 transition-colors hover:bg-secondary/40">
+                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${tx.type === 'income' ? 'bg-income-light' : 'bg-expense-light'}`}>
+                    {tx.type === 'income' ? <ArrowDownCircle className="h-4 w-4 text-income" /> : <ArrowUpCircle className="h-4 w-4 text-expense" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{t.title}</p>
+                    <p className="text-sm font-medium truncate">{tx.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {t.categories?.name && <span>{t.categories.name} · </span>}
-                      {format(parseISO(t.date), 'MMM d, yyyy')}
+                      {tx.categories?.name && <span>{tx.categories.name} · </span>}
+                      {format(parseISO(tx.date), 'MMM d, yyyy')}
                     </p>
                   </div>
-                  <p className={`text-sm font-bold tabular-nums ${
-                    t.type === 'income' ? 'text-income' : 'text-expense'
-                  }`}>
-                    {t.type === 'income' ? '+' : '−'}{fmtFull(Number(t.amount))}
+                  <p className={`text-sm font-bold tabular-nums ${tx.type === 'income' ? 'text-income' : 'text-expense'}`}>
+                    {tx.type === 'income' ? '+' : '−'}{fmtFull(Number(tx.amount))}
                   </p>
                 </div>
               ))}
@@ -426,11 +378,11 @@ const Dashboard = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary">
                 <Wallet className="h-5 w-5 text-muted-foreground" />
               </div>
-              <p className="mt-3 text-sm font-medium text-muted-foreground">No transactions yet</p>
-              <p className="mt-1 text-xs text-muted-foreground/70">Add income or expenses to get started</p>
+              <p className="mt-3 text-sm font-medium text-muted-foreground">{t('dashboard.noTransactions')}</p>
+              <p className="mt-1 text-xs text-muted-foreground/70">{t('dashboard.addTransactionsHint')}</p>
               <div className="mt-4 flex gap-2">
-                <Link to="/income"><Button size="sm" className="h-8 text-xs">Add Income</Button></Link>
-                <Link to="/expenses"><Button size="sm" variant="outline" className="h-8 text-xs">Add Expense</Button></Link>
+                <Link to="/income"><Button size="sm" className="h-8 text-xs">{t('dashboard.addIncome')}</Button></Link>
+                <Link to="/expenses"><Button size="sm" variant="outline" className="h-8 text-xs">{t('dashboard.addExpense')}</Button></Link>
               </div>
             </div>
           )}

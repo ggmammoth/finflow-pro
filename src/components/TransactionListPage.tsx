@@ -8,6 +8,7 @@ import { Plus, Pencil, Trash2, Loader2, Search, ArrowDownCircle, ArrowUpCircle }
 import { format, parseISO } from 'date-fns';
 import TransactionDialog from '@/components/TransactionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   type: 'income' | 'expense';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const TransactionListPage: React.FC<Props> = ({ type, title }) => {
+  const { t } = useTranslation();
   const { data: transactions, isLoading } = useTransactions(type);
   const deleteMutation = useDeleteTransaction();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -30,38 +32,32 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
   const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
   const total = filtered.reduce((s, t) => s + Number(t.amount), 0);
   const isIncome = type === 'income';
+  const translatedTitle = isIncome ? t('nav.income') : t('nav.expenses');
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <div className="flex items-center justify-center py-32"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">{title}</h1>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">{translatedTitle}</h1>
           <p className="mt-1 text-muted-foreground">
-            {filtered.length} transaction{filtered.length !== 1 ? 's' : ''} · Total:{' '}
+            {filtered.length} {t('common.transaction').toLowerCase()}{filtered.length !== 1 ? 's' : ''} · Total:{' '}
             <span className={`font-bold ${isIncome ? 'text-income' : 'text-expense'}`}>{fmt(total)}</span>
           </p>
         </div>
         <Button onClick={() => { setEditing(null); setDialogOpen(true); }} className="gap-2">
-          <Plus className="h-4 w-4" /> Add {isIncome ? 'Income' : 'Expense'}
+          <Plus className="h-4 w-4" /> {t('common.add')} {isIncome ? t('nav.income') : t('nav.expenses')}
         </Button>
       </div>
 
-      {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search transactions..." className="pl-9 bg-card border-border/60" value={search} onChange={e => setSearch(e.target.value)} />
+        <Input placeholder={t('transactions.searchPlaceholder')} className="pl-9 bg-card border-border/60" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      {/* Table */}
       <Card className="card-premium border-0">
         <CardContent className="p-0">
           {filtered.length > 0 ? (
@@ -69,12 +65,12 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Transaction</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
-                    {!isIncome && <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Method</th>}
-                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.transaction')}</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.category')}</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.date')}</th>
+                    {!isIncome && <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.method')}</th>}
+                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.amount')}</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -83,25 +79,16 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
                           <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${isIncome ? 'bg-income-light' : 'bg-expense-light'}`}>
-                            {isIncome
-                              ? <ArrowDownCircle className="h-4 w-4 text-income" />
-                              : <ArrowUpCircle className="h-4 w-4 text-expense" />
-                            }
+                            {isIncome ? <ArrowDownCircle className="h-4 w-4 text-income" /> : <ArrowUpCircle className="h-4 w-4 text-expense" />}
                           </div>
                           <span className="font-medium">{t.title}</span>
                         </div>
                       </td>
                       <td className="px-5 py-3.5">
-                        {t.categories?.name ? (
-                          <Badge variant="secondary" className="font-normal text-xs">{t.categories.name}</Badge>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
+                        {t.categories?.name ? <Badge variant="secondary" className="font-normal text-xs">{t.categories.name}</Badge> : <span className="text-muted-foreground">—</span>}
                       </td>
                       <td className="px-5 py-3.5 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
-                      {!isIncome && (
-                        <td className="px-5 py-3.5 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>
-                      )}
+                      {!isIncome && <td className="px-5 py-3.5 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>}
                       <td className={`px-5 py-3.5 text-right font-bold tabular-nums ${isIncome ? 'text-income' : 'text-expense'}`}>
                         {isIncome ? '+' : '−'}{fmt(Number(t.amount))}
                       </td>
@@ -123,17 +110,14 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isIncome ? 'bg-income-light' : 'bg-expense-light'}`}>
-                {isIncome
-                  ? <ArrowDownCircle className="h-6 w-6 text-income" />
-                  : <ArrowUpCircle className="h-6 w-6 text-expense" />
-                }
+                {isIncome ? <ArrowDownCircle className="h-6 w-6 text-income" /> : <ArrowUpCircle className="h-6 w-6 text-expense" />}
               </div>
               <p className="mt-4 text-sm font-medium text-muted-foreground">
-                {search ? 'No matching transactions' : `No ${type} transactions yet`}
+                {search ? t('transactions.noMatching') : t('transactions.noTransactionsYet', { type })}
               </p>
               {!search && (
                 <Button className="mt-4" size="sm" onClick={() => { setEditing(null); setDialogOpen(true); }}>
-                  <Plus className="mr-2 h-3.5 w-3.5" /> Add your first {type}
+                  <Plus className="mr-2 h-3.5 w-3.5" /> {t('transactions.addFirst', { type })}
                 </Button>
               )}
             </div>
@@ -146,13 +130,13 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete transaction?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle>{t('transactions.deleteTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('transactions.deleteDesc')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={() => { if (deleteId) { deleteMutation.mutate(deleteId); setDeleteId(null); } }}>
-              Delete
+              {t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
