@@ -3,7 +3,7 @@ import { useRecurringPayments, useDeleteRecurring, RecurringPayment } from '@/ho
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Pencil, Trash2, Loader2, RefreshCw, Calendar, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, RefreshCw, Calendar, ArrowUpCircle, ArrowDownCircle, Zap } from 'lucide-react';
 import { format, parseISO, isBefore } from 'date-fns';
 import RecurringDialog from '@/components/RecurringDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -19,7 +19,7 @@ const Recurring = () => {
   const now = new Date();
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-32"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+    return <div className="flex items-center justify-center py-32"><Loader2 className="h-7 w-7 animate-spin text-primary" /></div>;
   }
 
   const activePayments = (payments || []).filter(p => p.is_active);
@@ -38,8 +38,8 @@ const Recurring = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">Recurring Payments</h1>
-          <p className="mt-1 text-muted-foreground">
+          <h1 className="font-display text-2xl font-bold tracking-tight">Recurring Payments</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {activePayments.length} active · Est. monthly: <span className="font-bold text-expense">−{fmt(monthlyTotal)}</span>
           </p>
         </div>
@@ -51,52 +51,53 @@ const Recurring = () => {
       {activePayments.length > 0 || pausedPayments.length > 0 ? (
         <div className="space-y-6">
           {activePayments.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 animate-stagger">
               {activePayments.map(p => {
                 const isOverdue = isBefore(parseISO(p.next_due_date), now);
+                const isExpense = p.type === 'expense';
                 return (
-                  <Card key={p.id} className={`card-premium border-0 transition-all ${isOverdue ? 'ring-1 ring-expense/20' : ''}`}>
-                    <CardContent className="p-5">
+                  <Card key={p.id} className={`card-premium ${isOverdue ? 'ring-1 ring-expense/20' : ''}`}>
+                    <CardContent className="p-4">
                       <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                            p.type === 'expense' ? 'bg-expense-light' : 'bg-income-light'
+                        <div className="flex items-center gap-2.5">
+                          <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                            isExpense ? 'bg-expense-light' : 'bg-income-light'
                           }`}>
-                            {p.type === 'expense'
-                              ? <ArrowUpCircle className="h-5 w-5 text-expense" />
-                              : <ArrowDownCircle className="h-5 w-5 text-income" />
+                            {isExpense
+                              ? <ArrowUpCircle className="h-4 w-4 text-expense" />
+                              : <ArrowDownCircle className="h-4 w-4 text-income" />
                             }
                           </div>
-                          <div>
-                            <h3 className="font-semibold">{p.title}</h3>
+                          <div className="min-w-0">
+                            <h3 className="text-sm font-semibold truncate">{p.title}</h3>
                             <div className="mt-0.5 flex items-center gap-1.5">
-                              <Badge variant="secondary" className="text-[0.6875rem] font-normal capitalize">{p.frequency}</Badge>
+                              <Badge variant="secondary" className="h-5 text-[0.625rem] font-normal capitalize">{p.frequency}</Badge>
                               {p.categories?.name && (
-                                <span className="text-[0.6875rem] text-muted-foreground">· {p.categories.name}</span>
+                                <span className="text-[0.6875rem] text-muted-foreground truncate">· {p.categories.name}</span>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className="flex gap-0.5">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg" onClick={() => { setEditing(p); setDialogOpen(true); }}>
-                            <Pencil className="h-3.5 w-3.5" />
+                        <div className="flex gap-0.5 shrink-0">
+                          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={() => { setEditing(p); setDialogOpen(true); }}>
+                            <Pencil className="h-3 w-3" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-destructive/10" onClick={() => setDeleteId(p.id)}>
-                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md hover:bg-destructive/10" onClick={() => setDeleteId(p.id)}>
+                            <Trash2 className="h-3 w-3 text-destructive" />
                           </Button>
                         </div>
                       </div>
-                      <p className={`mt-4 font-display text-2xl font-extrabold tracking-tight ${p.type === 'expense' ? 'text-expense' : 'text-income'}`}>
-                        {p.type === 'expense' ? '−' : '+'}{fmt(Number(p.amount))}
+                      <p className={`mt-3 font-display text-xl font-bold tracking-tight ${isExpense ? 'text-expense' : 'text-income'}`}>
+                        {isExpense ? '−' : '+'}{fmt(Number(p.amount))}
                       </p>
-                      <div className="mt-3 flex items-center gap-2">
-                        <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                        <p className="text-xs text-muted-foreground">
+                      <div className="mt-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Calendar className="h-3 w-3" />
+                        <span>
                           Next: <span className={`font-medium ${isOverdue ? 'text-expense' : 'text-foreground'}`}>
                             {format(parseISO(p.next_due_date), 'MMM d, yyyy')}
                           </span>
-                        </p>
-                        {isOverdue && <Badge variant="destructive" className="text-[0.625rem] px-1.5 py-0">Overdue</Badge>}
+                        </span>
+                        {isOverdue && <Badge variant="destructive" className="h-4 text-[0.5625rem] px-1 py-0">Overdue</Badge>}
                       </div>
                     </CardContent>
                   </Card>
@@ -107,22 +108,22 @@ const Recurring = () => {
 
           {pausedPayments.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Paused</h3>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <h3 className="mb-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Paused</h3>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {pausedPayments.map(p => (
-                  <Card key={p.id} className="card-shadow border-0 opacity-60">
-                    <CardContent className="p-5">
+                  <Card key={p.id} className="card-flat opacity-50">
+                    <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-medium">{p.title}</h3>
-                          <p className="mt-1 text-sm text-muted-foreground capitalize">{p.frequency} · {fmt(Number(p.amount))}</p>
+                          <h3 className="text-sm font-medium">{p.title}</h3>
+                          <p className="mt-0.5 text-xs text-muted-foreground capitalize">{p.frequency} · {fmt(Number(p.amount))}</p>
                         </div>
                         <div className="flex gap-0.5">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg" onClick={() => { setEditing(p); setDialogOpen(true); }}>
-                            <Pencil className="h-3.5 w-3.5" />
+                          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={() => { setEditing(p); setDialogOpen(true); }}>
+                            <Pencil className="h-3 w-3" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg" onClick={() => setDeleteId(p.id)}>
-                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={() => setDeleteId(p.id)}>
+                            <Trash2 className="h-3 w-3 text-destructive" />
                           </Button>
                         </div>
                       </div>
@@ -134,15 +135,15 @@ const Recurring = () => {
           )}
         </div>
       ) : (
-        <Card className="card-premium border-0">
+        <Card className="card-premium">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary">
-              <RefreshCw className="h-6 w-6 text-muted-foreground" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-recurring-light">
+              <RefreshCw className="h-5 w-5 text-recurring" />
             </div>
-            <p className="mt-4 text-sm font-medium">No recurring payments yet</p>
-            <p className="mt-1 text-xs text-muted-foreground">Add subscriptions, bills, or automatic payments to track them</p>
+            <p className="mt-3 text-sm font-medium">No recurring payments</p>
+            <p className="mt-1 text-xs text-muted-foreground">Track subscriptions, bills, and automatic payments</p>
             <Button className="mt-5" size="sm" onClick={() => { setEditing(null); setDialogOpen(true); }}>
-              <Plus className="mr-2 h-3.5 w-3.5" /> Add your first recurring payment
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Add first recurring payment
             </Button>
           </CardContent>
         </Card>

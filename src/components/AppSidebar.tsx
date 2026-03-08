@@ -28,21 +28,18 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent className="py-2">
         {/* Logo */}
-        <div className={`flex items-center gap-3 px-5 py-5 ${collapsed ? 'justify-center px-3' : ''}`}>
-          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary glow-primary">
-            <TrendingUp className="h-4.5 w-4.5 text-sidebar-primary-foreground" />
+        <div className={`flex items-center gap-2.5 px-5 py-5 ${collapsed ? 'justify-center px-3' : ''}`}>
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
+            <TrendingUp className="h-4 w-4 text-sidebar-primary-foreground" />
           </div>
           {!collapsed && (
-            <div>
-              <span className="font-display text-lg font-extrabold tracking-tight text-sidebar-accent-foreground">
-                CashFlow
-              </span>
-            </div>
+            <span className="font-display text-base font-bold tracking-tight text-sidebar-accent-foreground">
+              CashFlow
+            </span>
           )}
         </div>
 
-        {/* Divider */}
-        <div className="mx-4 mb-2 border-b border-sidebar-border" />
+        <div className="mx-4 mb-3 border-b border-sidebar-border" />
 
         {/* Navigation */}
         <SidebarGroup>
@@ -57,10 +54,10 @@ export function AppSidebar() {
                       <NavLink
                         to={item.url}
                         end={item.url === '/dashboard'}
-                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.8125rem] font-medium text-sidebar-foreground transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                        activeClassName="bg-sidebar-accent text-sidebar-primary shadow-sm"
+                        className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[0.8125rem] font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        activeClassName="bg-sidebar-accent text-sidebar-primary"
                       >
-                        <item.icon className={`h-[18px] w-[18px] shrink-0 ${isActive ? 'text-sidebar-primary' : ''}`} />
+                        <item.icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-sidebar-primary' : ''}`} />
                         {!collapsed && <span>{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
@@ -70,16 +67,6 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Bottom section */}
-        <div className="mt-auto px-4 pb-4">
-          <div className={`rounded-xl bg-sidebar-accent/50 p-4 ${collapsed ? 'hidden' : ''}`}>
-            <p className="text-xs font-medium text-sidebar-accent-foreground">Pro Tip</p>
-            <p className="mt-1 text-[0.6875rem] leading-relaxed text-sidebar-foreground/70">
-              Set up recurring payments to automate your tracking.
-            </p>
-          </div>
-        </div>
       </SidebarContent>
     </Sidebar>
   );
