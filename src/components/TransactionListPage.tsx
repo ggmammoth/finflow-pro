@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useTransactions, useDeleteTransaction, Transaction } from '@/hooks/useFinanceData';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Plus, Pencil, Trash2, Loader2, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Search, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import TransactionDialog from '@/components/TransactionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -28,58 +29,91 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
 
   const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
   const total = filtered.reduce((s, t) => s + Number(t.amount), 0);
+  const isIncome = type === 'income';
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold">{title}</h1>
-          <p className="text-muted-foreground">Total: <span className={`font-semibold ${type === 'income' ? 'text-income' : 'text-expense'}`}>{fmt(total)}</span></p>
+          <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">{title}</h1>
+          <p className="mt-1 text-muted-foreground">
+            {filtered.length} transaction{filtered.length !== 1 ? 's' : ''} · Total:{' '}
+            <span className={`font-bold ${isIncome ? 'text-income' : 'text-expense'}`}>{fmt(total)}</span>
+          </p>
         </div>
-        <Button onClick={() => { setEditing(null); setDialogOpen(true); }}>
-          <Plus className="mr-2 h-4 w-4" /> Add {type === 'income' ? 'Income' : 'Expense'}
+        <Button onClick={() => { setEditing(null); setDialogOpen(true); }} className="gap-2">
+          <Plus className="h-4 w-4" /> Add {isIncome ? 'Income' : 'Expense'}
         </Button>
       </div>
 
+      {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search transactions..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
+        <Input placeholder="Search transactions..." className="pl-9 bg-card border-border/60" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      <Card className="card-shadow">
+      {/* Table */}
+      <Card className="card-premium border-0">
         <CardContent className="p-0">
           {filtered.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-left text-muted-foreground">
-                    <th className="p-4 font-medium">Title</th>
-                    <th className="p-4 font-medium">Category</th>
-                    <th className="p-4 font-medium">Date</th>
-                    {type === 'expense' && <th className="p-4 font-medium">Method</th>}
-                    <th className="p-4 text-right font-medium">Amount</th>
-                    <th className="p-4 text-right font-medium">Actions</th>
+                  <tr className="border-b">
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Transaction</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
+                    {!isIncome && <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Method</th>}
+                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map(t => (
-                    <tr key={t.id} className="border-b last:border-0 hover:bg-muted/50">
-                      <td className="p-4 font-medium">{t.title}</td>
-                      <td className="p-4 text-muted-foreground">{t.categories?.name || '—'}</td>
-                      <td className="p-4 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
-                      {type === 'expense' && <td className="p-4 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>}
-                      <td className={`p-4 text-right font-semibold ${type === 'income' ? 'text-income' : 'text-expense'}`}>{fmt(Number(t.amount))}</td>
-                      <td className="p-4 text-right">
-                        <Button variant="ghost" size="icon" onClick={() => { setEditing(t); setDialogOpen(true); }}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteId(t.id)}>
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+                    <tr key={t.id} className="group border-b border-border/50 last:border-0 transition-colors hover:bg-secondary/30">
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-3">
+                          <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${isIncome ? 'bg-income-light' : 'bg-expense-light'}`}>
+                            {isIncome
+                              ? <ArrowDownCircle className="h-4 w-4 text-income" />
+                              : <ArrowUpCircle className="h-4 w-4 text-expense" />
+                            }
+                          </div>
+                          <span className="font-medium">{t.title}</span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        {t.categories?.name ? (
+                          <Badge variant="secondary" className="font-normal text-xs">{t.categories.name}</Badge>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </td>
+                      <td className="px-5 py-3.5 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
+                      {!isIncome && (
+                        <td className="px-5 py-3.5 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>
+                      )}
+                      <td className={`px-5 py-3.5 text-right font-bold tabular-nums ${isIncome ? 'text-income' : 'text-expense'}`}>
+                        {isIncome ? '+' : '−'}{fmt(Number(t.amount))}
+                      </td>
+                      <td className="px-5 py-3.5 text-right">
+                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg" onClick={() => { setEditing(t); setDialogOpen(true); }}>
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-destructive/10" onClick={() => setDeleteId(t.id)}>
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -87,8 +121,21 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
               </table>
             </div>
           ) : (
-            <div className="py-12 text-center text-muted-foreground">
-              {search ? 'No matching transactions' : `No ${type} transactions yet. Click "Add" to get started!`}
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isIncome ? 'bg-income-light' : 'bg-expense-light'}`}>
+                {isIncome
+                  ? <ArrowDownCircle className="h-6 w-6 text-income" />
+                  : <ArrowUpCircle className="h-6 w-6 text-expense" />
+                }
+              </div>
+              <p className="mt-4 text-sm font-medium text-muted-foreground">
+                {search ? 'No matching transactions' : `No ${type} transactions yet`}
+              </p>
+              {!search && (
+                <Button className="mt-4" size="sm" onClick={() => { setEditing(null); setDialogOpen(true); }}>
+                  <Plus className="mr-2 h-3.5 w-3.5" /> Add your first {type}
+                </Button>
+              )}
             </div>
           )}
         </CardContent>
@@ -104,7 +151,7 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => { if (deleteId) { deleteMutation.mutate(deleteId); setDeleteId(null); } }}>
+            <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={() => { if (deleteId) { deleteMutation.mutate(deleteId); setDeleteId(null); } }}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

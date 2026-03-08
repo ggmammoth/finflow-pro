@@ -31,40 +31,42 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md card-shadow">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-            <TrendingUp className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <CardTitle className="font-display text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your CashFlow account</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+      <div className="w-full max-w-md animate-fade-in">
+        <Card className="card-premium border-0 shadow-elevated">
+          <CardHeader className="pb-4 text-center">
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
+              <TrendingUp className="h-7 w-7 text-primary-foreground" />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
+            <CardTitle className="font-display text-2xl font-extrabold tracking-tight">Welcome back</CardTitle>
+            <CardDescription className="mt-1">Sign in to your CashFlow account</CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" className="h-11" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
-              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign in
-            </Button>
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:underline">Sign up</Link>
-            </p>
-          </CardFooter>
-        </form>
-      </Card>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Password</Label>
+                  <Link to="/forgot-password" className="text-xs font-medium text-primary hover:underline">Forgot password?</Link>
+                </div>
+                <Input id="password" type="password" placeholder="••••••••" className="h-11" value={password} onChange={e => setPassword(e.target.value)} required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4 pt-2">
+              <Button type="submit" className="h-11 w-full text-base" disabled={loading}>
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Sign in
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?{' '}
+                <Link to="/register" className="font-medium text-primary hover:underline">Sign up</Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 };
