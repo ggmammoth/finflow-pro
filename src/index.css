@@ -6,133 +6,140 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 222 47% 11%;
+    --background: 225 25% 97%;
+    --foreground: 224 50% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 224 50% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 224 50% 10%;
 
-    --primary: 160 84% 39%;
+    --primary: 158 64% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 225 18% 95%;
+    --secondary-foreground: 224 50% 10%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 225 18% 95%;
+    --muted-foreground: 224 10% 48%;
 
-    --accent: 160 60% 95%;
-    --accent-foreground: 160 84% 25%;
+    --accent: 158 45% 93%;
+    --accent-foreground: 158 64% 28%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 4 76% 56%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 158 64% 40%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 40 96% 52%;
     --warning-foreground: 0 0% 100%;
 
-    --income: 158 64% 42%;
-    --income-light: 158 64% 95%;
+    --income: 152 56% 42%;
+    --income-light: 152 50% 95%;
     --income-foreground: 0 0% 100%;
 
-    --expense: 0 72% 51%;
-    --expense-light: 0 72% 96%;
+    --expense: 4 76% 56%;
+    --expense-light: 4 60% 96%;
     --expense-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 160 84% 39%;
+    --recurring: 262 68% 56%;
+    --recurring-light: 262 50% 96%;
 
-    --radius: 0.75rem;
+    --border: 225 15% 91%;
+    --input: 225 15% 91%;
+    --ring: 158 64% 40%;
 
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 220 14% 78%;
-    --sidebar-primary: 160 84% 45%;
+    --radius: 0.625rem;
+
+    --sidebar-background: 228 40% 8%;
+    --sidebar-foreground: 225 15% 65%;
+    --sidebar-primary: 158 64% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 30% 14%;
-    --sidebar-accent-foreground: 220 14% 90%;
-    --sidebar-border: 222 30% 15%;
-    --sidebar-ring: 160 84% 39%;
+    --sidebar-accent: 228 30% 14%;
+    --sidebar-accent-foreground: 225 15% 88%;
+    --sidebar-border: 228 25% 15%;
+    --sidebar-ring: 158 64% 40%;
 
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-body: 'Inter', sans-serif;
 
-    --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-    --shadow-card-hover: 0 10px 30px -8px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-    --shadow-elevated: 0 20px 40px -12px rgba(0, 0, 0, 0.1), 0 8px 16px -8px rgba(0, 0, 0, 0.06);
-    --shadow-glow-income: 0 4px 20px -4px hsla(158, 64%, 42%, 0.25);
-    --shadow-glow-expense: 0 4px 20px -4px hsla(0, 72%, 51%, 0.2);
-    --shadow-glow-primary: 0 4px 20px -4px hsla(160, 84%, 39%, 0.25);
+    --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px -1px rgba(0, 0, 0, 0.03);
+    --shadow-card-hover: 0 8px 25px -6px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04);
+    --shadow-elevated: 0 16px 40px -10px rgba(0, 0, 0, 0.12), 0 6px 12px -6px rgba(0, 0, 0, 0.06);
+    --shadow-glow-income: 0 4px 16px -4px hsla(152, 56%, 42%, 0.2);
+    --shadow-glow-expense: 0 4px 16px -4px hsla(4, 76%, 56%, 0.18);
+    --shadow-glow-primary: 0 4px 16px -4px hsla(158, 64%, 40%, 0.22);
+    --shadow-glow-recurring: 0 4px 16px -4px hsla(262, 68%, 56%, 0.18);
 
-    --chart-1: 160 84% 39%;
-    --chart-2: 217 91% 60%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 330 81% 60%;
-    --chart-5: 262 83% 58%;
+    --chart-1: 158 64% 40%;
+    --chart-2: 217 80% 58%;
+    --chart-3: 40 96% 52%;
+    --chart-4: 330 72% 58%;
+    --chart-5: 262 68% 56%;
   }
 
   .dark {
-    --background: 222 47% 6%;
+    --background: 228 40% 5%;
     --foreground: 210 20% 95%;
 
-    --card: 222 40% 10%;
+    --card: 228 35% 9%;
     --card-foreground: 210 20% 95%;
 
-    --popover: 222 40% 10%;
+    --popover: 228 35% 9%;
     --popover-foreground: 210 20% 95%;
 
-    --primary: 160 72% 45%;
+    --primary: 158 56% 46%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 30% 14%;
+    --secondary: 228 25% 14%;
     --secondary-foreground: 210 20% 95%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 215 15% 55%;
+    --muted: 228 25% 14%;
+    --muted-foreground: 220 12% 52%;
 
-    --accent: 160 30% 15%;
-    --accent-foreground: 160 72% 60%;
+    --accent: 158 25% 14%;
+    --accent-foreground: 158 56% 58%;
 
-    --destructive: 0 62% 50%;
+    --destructive: 4 68% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 72% 45%;
+    --success: 158 56% 46%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 80% 50%;
+    --warning: 40 80% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --income: 158 60% 48%;
-    --income-light: 158 30% 14%;
+    --income: 152 50% 48%;
+    --income-light: 152 25% 13%;
     --income-foreground: 0 0% 100%;
 
-    --expense: 0 62% 50%;
-    --expense-light: 0 30% 14%;
+    --expense: 4 68% 52%;
+    --expense-light: 4 25% 13%;
     --expense-foreground: 0 0% 100%;
 
-    --border: 222 20% 18%;
-    --input: 222 20% 18%;
-    --ring: 160 72% 45%;
+    --recurring: 262 58% 58%;
+    --recurring-light: 262 25% 13%;
 
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 210 15% 70%;
-    --sidebar-primary: 160 72% 50%;
+    --border: 228 18% 16%;
+    --input: 228 18% 16%;
+    --ring: 158 56% 46%;
+
+    --sidebar-background: 228 40% 4%;
+    --sidebar-foreground: 210 12% 60%;
+    --sidebar-primary: 158 56% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 30% 12%;
-    --sidebar-accent-foreground: 210 15% 85%;
-    --sidebar-border: 222 25% 12%;
-    --sidebar-ring: 160 72% 45%;
+    --sidebar-accent: 228 25% 11%;
+    --sidebar-accent-foreground: 210 12% 82%;
+    --sidebar-border: 228 20% 11%;
+    --sidebar-ring: 158 56% 46%;
 
-    --chart-1: 160 72% 45%;
-    --chart-2: 217 80% 55%;
-    --chart-3: 38 80% 50%;
-    --chart-4: 330 70% 55%;
-    --chart-5: 262 70% 55%;
+    --chart-1: 158 56% 46%;
+    --chart-2: 217 70% 54%;
+    --chart-3: 40 80% 50%;
+    --chart-4: 330 62% 54%;
+    --chart-5: 262 58% 58%;
   }
 }
 
@@ -147,32 +154,37 @@
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(160 90% 50%));
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(152 70% 52%));
   }
+
   .card-premium {
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border: 1px solid hsl(var(--border) / 0.6);
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
   }
   .card-premium:hover {
     box-shadow: var(--shadow-card-hover);
+    border-color: hsl(var(--border));
     transform: translateY(-1px);
   }
-  .card-shadow {
-    box-shadow: var(--shadow-card);
+
+  .card-flat {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: none;
   }
-  .card-shadow-hover {
-    box-shadow: var(--shadow-card-hover);
-  }
+
   .shadow-elevated {
     box-shadow: var(--shadow-elevated);
   }
+
   .glow-income {
     box-shadow: var(--shadow-glow-income);
   }
@@ -182,16 +194,44 @@
   .glow-primary {
     box-shadow: var(--shadow-glow-primary);
   }
-  .glass {
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  .glow-recurring {
+    box-shadow: var(--shadow-glow-recurring);
   }
+
+  .glass {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  .stat-card-income {
+    border-left: 3px solid hsl(var(--income));
+  }
+  .stat-card-expense {
+    border-left: 3px solid hsl(var(--expense));
+  }
+  .stat-card-balance {
+    border-left: 3px solid hsl(var(--primary));
+  }
+  .stat-card-recurring {
+    border-left: 3px solid hsl(var(--recurring));
+  }
+
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 0.4s ease-out forwards;
   }
   .animate-slide-up {
-    animation: slideUp 0.5s ease-out forwards;
+    animation: slideUp 0.4s ease-out forwards;
   }
+  .animate-stagger > * {
+    opacity: 0;
+    animation: slideUp 0.4s ease-out forwards;
+  }
+  .animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .animate-stagger > *:nth-child(2) { animation-delay: 60ms; }
+  .animate-stagger > *:nth-child(3) { animation-delay: 120ms; }
+  .animate-stagger > *:nth-child(4) { animation-delay: 180ms; }
+  .animate-stagger > *:nth-child(5) { animation-delay: 240ms; }
+  .animate-stagger > *:nth-child(6) { animation-delay: 300ms; }
 }
 
 @keyframes fadeIn {
@@ -200,41 +240,38 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--border));
-  border-radius: 3px;
+  border-radius: 100px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.3);
 }
 
-/* Recharts overrides */
+/* Recharts */
 .recharts-tooltip-wrapper .recharts-default-tooltip {
   background: hsl(var(--card)) !important;
   border: 1px solid hsl(var(--border)) !important;
-  border-radius: 0.5rem !important;
+  border-radius: var(--radius) !important;
   box-shadow: var(--shadow-elevated) !important;
-  padding: 0.75rem 1rem !important;
+  padding: 0.625rem 0.875rem !important;
+  font-size: 0.8125rem !important;
 }
 .recharts-tooltip-item {
   font-family: var(--font-body) !important;
   font-size: 0.8125rem !important;
+  padding: 1px 0 !important;
 }
 .recharts-tooltip-label {
   font-family: var(--font-display) !important;
   font-weight: 600 !important;
   font-size: 0.8125rem !important;
-  margin-bottom: 0.25rem !important;
+  margin-bottom: 0.125rem !important;
 }
