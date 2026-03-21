@@ -2,12 +2,13 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, ChevronDown, Globe } from 'lucide-react';
+import { LogOut, User, ChevronDown, Globe, Moon, Sun } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/hooks/useTheme';
 
 const languages = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -21,6 +22,7 @@ const TopBar: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSignOut = async () => {
     await signOut();
@@ -36,6 +38,17 @@ const TopBar: React.FC = () => {
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
       </div>
       <div className="flex items-center gap-1.5">
+        {/* Theme Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground"
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        </Button>
+
         {/* Language Switcher */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
