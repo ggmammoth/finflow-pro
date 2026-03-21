@@ -365,7 +365,7 @@ const Dashboard = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{tx.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.categories?.name && <span>{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories.name} · </span>}
+                      {tx.categories?.name && <span>{catLabel(tx.categories.name, tx.categories.icon)} · </span>}
                       {format(parseISO(tx.date), 'MMM d, yyyy')}
                     </p>
                   </div>
