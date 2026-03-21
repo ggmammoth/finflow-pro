@@ -19,6 +19,7 @@ const CHART_COLORS = [
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading: loadingTx } = useTransactions();
   const { data: recurring, isLoading: loadingRec } = useRecurringPayments();
 
