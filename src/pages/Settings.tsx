@@ -5,16 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, User, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { CURRENCIES, CurrencyCode } from '@/hooks/useCurrency';
 
 const SettingsPage = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const { t } = useTranslation();
   const [fullName, setFullName] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState<CurrencyCode>('USD');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const SettingsPage = () => {
       supabase.from('profiles').select('*').eq('user_id', user.id).single().then(({ data }) => {
         if (data) {
           setFullName(data.full_name || '');
-          setCurrency(data.currency || 'USD');
+          setCurrency((data.currency as CurrencyCode) || 'USD');
         }
       });
     }
@@ -71,7 +73,22 @@ const SettingsPage = () => {
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('settings.currency')}</Label>
-              <Input value={currency} onChange={e => setCurrency(e.target.value)} placeholder="USD" />
+              <Select value={currency} onValueChange={(v) => setCurrency(v as CurrencyCode)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CURRENCIES.map((c) => (
+                    <SelectItem key={c.code} value={c.code}>
+                      <span className="flex items-center gap-2">
+                        <span className="font-mono text-xs text-muted-foreground">{c.code}</span>
+                        <span>{c.label}</span>
+                        <span className="text-muted-foreground">({c.symbol})</span>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <Button onClick={handleSave} disabled={loading} className="mt-2">
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
