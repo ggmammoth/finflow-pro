@@ -9,6 +9,7 @@ import { format, parseISO } from 'date-fns';
 import TransactionDialog from '@/components/TransactionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface Props {
   type: 'income' | 'expense';
@@ -29,7 +30,7 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
     (t.categories?.name || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmt } = useCurrency();
   const total = filtered.reduce((s, t) => s + Number(t.amount), 0);
   const isIncome = type === 'income';
   const translatedTitle = isIncome ? t('nav.income') : t('nav.expenses');

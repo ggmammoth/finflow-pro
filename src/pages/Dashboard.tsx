@@ -8,6 +8,7 @@ import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isBefore 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const CHART_COLORS = [
   'hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))',
@@ -91,8 +92,7 @@ const Dashboard = () => {
     );
   }
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-  const fmtFull = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmtCompact: fmt, fmt: fmtFull } = useCurrency();
 
   return (
     <div className="space-y-6 animate-fade-in">

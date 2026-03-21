@@ -8,6 +8,7 @@ import { format, parseISO, isBefore } from 'date-fns';
 import RecurringDialog from '@/components/RecurringDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const Recurring = () => {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ const Recurring = () => {
   const [editing, setEditing] = useState<RecurringPayment | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmt } = useCurrency();
   const now = new Date();
 
   if (isLoading) {

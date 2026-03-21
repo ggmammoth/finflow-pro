@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { format, parseISO, isWithinInterval } from 'date-fns';
 import { Loader2, TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const Reports = () => {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ const Reports = () => {
     return Object.values(months).reverse();
   }, [filtered]);
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmt } = useCurrency();
 
   if (isLoading) {
     return <div className="flex items-center justify-center py-32"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
