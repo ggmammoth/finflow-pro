@@ -19,6 +19,7 @@ interface Props {
 
 const TransactionListPage: React.FC<Props> = ({ type, title }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading } = useTransactions(type);
   const deleteMutation = useDeleteTransaction();
   const [dialogOpen, setDialogOpen] = useState(false);
