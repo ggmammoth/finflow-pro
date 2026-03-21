@@ -17,7 +17,7 @@ const Recurring = () => {
   const [editing, setEditing] = useState<RecurringPayment | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmt } = useCurrency();
   const now = new Date();
 
   if (isLoading) {

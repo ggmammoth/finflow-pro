@@ -29,7 +29,7 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
     (t.categories?.name || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmt } = useCurrency();
   const total = filtered.reduce((s, t) => s + Number(t.amount), 0);
   const isIncome = type === 'income';
   const translatedTitle = isIncome ? t('nav.income') : t('nav.expenses');
