@@ -34,6 +34,7 @@ interface Props {
 
 const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const [selectedType, setSelectedType] = useState<string>(editRecurring?.type || 'expense');
   const { data: categories } = useCategories(selectedType);
   const createMutation = useCreateRecurring();
