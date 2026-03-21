@@ -59,6 +59,28 @@ export function useCategories(type?: string) {
   });
 }
 
+export function useCreateCategory() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async (data: { name: string; type: string }) => {
+      const { data: result, error } = await supabase
+        .from('categories')
+        .insert({ name: data.name, type: data.type, user_id: user!.id, is_default: false })
+        .select()
+        .single();
+      if (error) throw error;
+      return result as Category;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      toast({ title: 'Category created' });
+    },
+    onError: (e: any) => toast({ title: 'Error', description: e.message, variant: 'destructive' }),
+  });
+}
+
 export function useTransactions(type?: string) {
   const { user } = useAuth();
   return useQuery({

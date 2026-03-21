@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useCategories, useCreateTransaction, useUpdateTransaction, Transaction } from '@/hooks/useFinanceData';
-import { Loader2 } from 'lucide-react';
+import { useCategories, useCreateTransaction, useUpdateTransaction, useCreateCategory, Transaction } from '@/hooks/useFinanceData';
+import { Loader2, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
@@ -35,7 +35,10 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
   const { data: categories } = useCategories(type);
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
+  const createCategoryMutation = useCreateCategory();
   const isEditing = !!editTransaction;
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -59,7 +62,17 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
     } else {
       reset({ date: new Date().toISOString().split('T')[0] });
     }
-  }, [editTransaction, reset]);
+    setShowNewCategory(false);
+    setNewCategoryName('');
+  }, [editTransaction, reset, open]);
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    const result = await createCategoryMutation.mutateAsync({ name: newCategoryName.trim(), type });
+    setValue('category_id', result.id);
+    setShowNewCategory(false);
+    setNewCategoryName('');
+  };
 
   const onSubmit = async (data: FormData) => {
     const payload = {
@@ -101,13 +114,45 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
             </div>
           </div>
           <div className="space-y-2">
-            <Label>{t('common.category')}</Label>
-            <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
-              <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
-              <SelectContent>
-                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <div className="flex items-center justify-between">
+              <Label>{t('common.category')}</Label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-6 text-xs gap-1 text-primary"
+                onClick={() => setShowNewCategory(!showNewCategory)}
+              >
+                <Plus className="h-3 w-3" />
+                {t('dialog.newCategory', 'New')}
+              </Button>
+            </div>
+            {showNewCategory ? (
+              <div className="flex gap-2">
+                <Input
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  placeholder={t('dialog.categoryName', 'Category name')}
+                  className="flex-1"
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleAddCategory}
+                  disabled={createCategoryMutation.isPending || !newCategoryName.trim()}
+                >
+                  {createCategoryMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.add')}
+                </Button>
+              </div>
+            ) : (
+              <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
+                <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
+                <SelectContent>
+                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            )}
           </div>
           {type === 'expense' && (
             <div className="space-y-2">
