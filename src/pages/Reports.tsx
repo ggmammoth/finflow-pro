@@ -163,7 +163,7 @@ const Reports = () => {
                       <td className="px-6 py-3">
                         <Badge variant={tx.type === 'income' ? 'default' : 'destructive'} className="text-[0.6875rem] capitalize">{t(`dialog.${tx.type}`)}</Badge>
                       </td>
-                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.name || '—'}</td>
+                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories?.name || '—'}</td>
                       <td className="px-6 py-3 text-muted-foreground">{format(parseISO(tx.date), 'MMM d, yyyy')}</td>
                       <td className={`px-6 py-3 text-right font-bold tabular-nums ${tx.type === 'income' ? 'text-income' : 'text-expense'}`}>
                         {tx.type === 'income' ? '+' : '−'}{fmt(Number(tx.amount))}
