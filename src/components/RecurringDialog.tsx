@@ -178,7 +178,7 @@ const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring })
               <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editRecurring?.category_id || ''}>
                 <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
                 <SelectContent>
-                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
+                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
                 </SelectContent>
               </Select>
             )}
