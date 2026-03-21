@@ -81,6 +81,8 @@ const Dashboard = () => {
 
   const recentTransactions = useMemo(() => (transactions || []).slice(0, 6), [transactions]);
 
+  const { fmtCompact: fmt, fmt: fmtFull } = useCurrency();
+
   if (loadingTx || loadingRec) {
     return (
       <div className="flex items-center justify-center py-32">
@@ -91,8 +93,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
-  const { fmtCompact: fmt, fmt: fmtFull } = useCurrency();
 
   return (
     <div className="space-y-6 animate-fade-in">
