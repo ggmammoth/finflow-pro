@@ -10,9 +10,11 @@ import { format, parseISO, isWithinInterval } from 'date-fns';
 import { Loader2, TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Reports = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading } = useTransactions();
   const { data: categories } = useCategories();
   const [startDate, setStartDate] = useState(() => {
@@ -76,7 +78,7 @@ const Reports = () => {
               <SelectTrigger className="bg-secondary/50 border-border/60"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t('reports.allCategories')}</SelectItem>
-                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
+                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -163,7 +165,7 @@ const Reports = () => {
                       <td className="px-6 py-3">
                         <Badge variant={tx.type === 'income' ? 'default' : 'destructive'} className="text-[0.6875rem] capitalize">{t(`dialog.${tx.type}`)}</Badge>
                       </td>
-                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories?.name || '—'}</td>
+                      <td className="px-6 py-3 text-muted-foreground">{catLabel(tx.categories?.name, tx.categories?.icon) || '—'}</td>
                       <td className="px-6 py-3 text-muted-foreground">{format(parseISO(tx.date), 'MMM d, yyyy')}</td>
                       <td className={`px-6 py-3 text-right font-bold tabular-nums ${tx.type === 'income' ? 'text-income' : 'text-expense'}`}>
                         {tx.type === 'income' ? '+' : '−'}{fmt(Number(tx.amount))}

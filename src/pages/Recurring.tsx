@@ -9,9 +9,11 @@ import RecurringDialog from '@/components/RecurringDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Recurring = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: payments, isLoading } = useRecurringPayments();
   const deleteMutation = useDeleteRecurring();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -70,7 +72,7 @@ const Recurring = () => {
                             <h3 className="text-sm font-semibold truncate">{p.title}</h3>
                             <div className="mt-0.5 flex items-center gap-1.5">
                               <Badge variant="secondary" className="h-5 text-[0.625rem] font-normal capitalize">{t(`dialog.${p.frequency}`)}</Badge>
-                              {p.categories?.name && <span className="text-[0.6875rem] text-muted-foreground truncate">· {p.categories?.icon ? `${p.categories.icon} ` : ''}{p.categories.name}</span>}
+                              {p.categories?.name && <span className="text-[0.6875rem] text-muted-foreground truncate">· {catLabel(p.categories.name, p.categories.icon)}</span>}
                             </div>
                           </div>
                         </div>

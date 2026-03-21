@@ -10,6 +10,7 @@ import TransactionDialog from '@/components/TransactionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 interface Props {
   type: 'income' | 'expense';
@@ -18,6 +19,7 @@ interface Props {
 
 const TransactionListPage: React.FC<Props> = ({ type, title }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading } = useTransactions(type);
   const deleteMutation = useDeleteTransaction();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -86,7 +88,7 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
                         </div>
                       </td>
                       <td className="px-5 py-3.5">
-                        {t.categories?.name ? <Badge variant="secondary" className="font-normal text-xs">{t.categories.icon ? `${t.categories.icon} ` : ''}{t.categories.name}</Badge> : <span className="text-muted-foreground">—</span>}
+                        {t.categories?.name ? <Badge variant="secondary" className="font-normal text-xs">{catLabel(t.categories.name, t.categories.icon)}</Badge> : <span className="text-muted-foreground">—</span>}
                       </td>
                       <td className="px-5 py-3.5 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
                       {!isIncome && <td className="px-5 py-3.5 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>}

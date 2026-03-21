@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateTransaction, useUpdateTransaction, useCreateCategory, Transaction } from '@/hooks/useFinanceData';
 import { Loader2, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),
@@ -32,6 +33,7 @@ interface Props {
 
 const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTransaction }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: categories } = useCategories(type);
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
@@ -149,7 +151,7 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
               <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
                 <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
                 <SelectContent>
-                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
+                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
                 </SelectContent>
               </Select>
             )}

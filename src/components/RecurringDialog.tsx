@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateRecurring, useUpdateRecurring, useCreateCategory, RecurringPayment } from '@/hooks/useFinanceData';
 import { Loader2, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),
@@ -33,6 +34,7 @@ interface Props {
 
 const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const [selectedType, setSelectedType] = useState<string>(editRecurring?.type || 'expense');
   const { data: categories } = useCategories(selectedType);
   const createMutation = useCreateRecurring();
@@ -176,7 +178,7 @@ const RecurringDialog: React.FC<Props> = ({ open, onOpenChange, editRecurring })
               <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editRecurring?.category_id || ''}>
                 <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
                 <SelectContent>
-                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
+                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
                 </SelectContent>
               </Select>
             )}

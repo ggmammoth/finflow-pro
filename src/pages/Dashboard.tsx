@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const CHART_COLORS = [
   'hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))',
@@ -18,6 +19,7 @@ const CHART_COLORS = [
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading: loadingTx } = useTransactions();
   const { data: recurring, isLoading: loadingRec } = useRecurringPayments();
 
@@ -61,8 +63,7 @@ const Dashboard = () => {
     transactions
       .filter(t => t.type === 'expense' && isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }))
       .forEach(t => {
-        const icon = t.categories?.icon || '';
-        const name = (icon ? `${icon} ` : '') + (t.categories?.name || 'Uncategorized');
+        const name = catLabel(t.categories?.name || 'Uncategorized', t.categories?.icon);
         cats[name] = (cats[name] || 0) + Number(t.amount);
       });
     return Object.entries(cats).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
@@ -364,7 +365,7 @@ const Dashboard = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{tx.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.categories?.name && <span>{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories.name} · </span>}
+                      {tx.categories?.name && <span>{catLabel(tx.categories.name, tx.categories.icon)} · </span>}
                       {format(parseISO(tx.date), 'MMM d, yyyy')}
                     </p>
                   </div>
