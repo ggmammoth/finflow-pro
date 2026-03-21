@@ -92,8 +92,7 @@ const Dashboard = () => {
     );
   }
 
-  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-  const fmtFull = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+  const { fmtCompact: fmt, fmt: fmtFull } = useCurrency();
 
   return (
     <div className="space-y-6 animate-fade-in">

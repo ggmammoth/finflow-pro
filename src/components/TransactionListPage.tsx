@@ -9,6 +9,7 @@ import { format, parseISO } from 'date-fns';
 import TransactionDialog from '@/components/TransactionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface Props {
   type: 'income' | 'expense';
