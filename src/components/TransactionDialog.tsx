@@ -33,6 +33,7 @@ interface Props {
 
 const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTransaction }) => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: categories } = useCategories(type);
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
