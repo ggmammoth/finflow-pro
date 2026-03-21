@@ -63,8 +63,7 @@ const Dashboard = () => {
     transactions
       .filter(t => t.type === 'expense' && isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }))
       .forEach(t => {
-        const icon = t.categories?.icon || '';
-        const name = (icon ? `${icon} ` : '') + (t.categories?.name || 'Uncategorized');
+        const name = catLabel(t.categories?.name || 'Uncategorized', t.categories?.icon);
         cats[name] = (cats[name] || 0) + Number(t.amount);
       });
     return Object.entries(cats).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
