@@ -14,6 +14,7 @@ import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Reports = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: transactions, isLoading } = useTransactions();
   const { data: categories } = useCategories();
   const [startDate, setStartDate] = useState(() => {
