@@ -2,12 +2,13 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, ChevronDown, Globe } from 'lucide-react';
+import { LogOut, User, ChevronDown, Globe, Moon, Sun } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/hooks/useTheme';
 
 const languages = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
