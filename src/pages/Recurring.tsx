@@ -9,6 +9,7 @@ import RecurringDialog from '@/components/RecurringDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Recurring = () => {
   const { t } = useTranslation();

@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateTransaction, useUpdateTransaction, useCreateCategory, Transaction } from '@/hooks/useFinanceData';
 import { Loader2, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),

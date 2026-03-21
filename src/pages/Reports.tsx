@@ -10,6 +10,7 @@ import { format, parseISO, isWithinInterval } from 'date-fns';
 import { Loader2, TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Reports = () => {
   const { t } = useTranslation();
