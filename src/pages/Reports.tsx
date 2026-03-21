@@ -78,7 +78,7 @@ const Reports = () => {
               <SelectTrigger className="bg-secondary/50 border-border/60"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t('reports.allCategories')}</SelectItem>
-                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
+                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
