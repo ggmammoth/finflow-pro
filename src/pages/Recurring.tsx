@@ -13,6 +13,7 @@ import { useCategoryName } from '@/hooks/useCategoryName';
 
 const Recurring = () => {
   const { t } = useTranslation();
+  const catLabel = useCategoryName();
   const { data: payments, isLoading } = useRecurringPayments();
   const deleteMutation = useDeleteRecurring();
   const [dialogOpen, setDialogOpen] = useState(false);
