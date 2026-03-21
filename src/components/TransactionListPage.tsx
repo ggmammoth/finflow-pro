@@ -86,7 +86,7 @@ const TransactionListPage: React.FC<Props> = ({ type, title }) => {
                         </div>
                       </td>
                       <td className="px-5 py-3.5">
-                        {t.categories?.name ? <Badge variant="secondary" className="font-normal text-xs">{t.categories.name}</Badge> : <span className="text-muted-foreground">—</span>}
+                        {t.categories?.name ? <Badge variant="secondary" className="font-normal text-xs">{t.categories.icon ? `${t.categories.icon} ` : ''}{t.categories.name}</Badge> : <span className="text-muted-foreground">—</span>}
                       </td>
                       <td className="px-5 py-3.5 text-muted-foreground">{format(parseISO(t.date), 'MMM d, yyyy')}</td>
                       {!isIncome && <td className="px-5 py-3.5 text-muted-foreground capitalize">{t.payment_method?.replace('_', ' ') || '—'}</td>}

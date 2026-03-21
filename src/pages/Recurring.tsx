@@ -70,7 +70,7 @@ const Recurring = () => {
                             <h3 className="text-sm font-semibold truncate">{p.title}</h3>
                             <div className="mt-0.5 flex items-center gap-1.5">
                               <Badge variant="secondary" className="h-5 text-[0.625rem] font-normal capitalize">{t(`dialog.${p.frequency}`)}</Badge>
-                              {p.categories?.name && <span className="text-[0.6875rem] text-muted-foreground truncate">· {p.categories.name}</span>}
+                              {p.categories?.name && <span className="text-[0.6875rem] text-muted-foreground truncate">· {p.categories?.icon ? `${p.categories.icon} ` : ''}{p.categories.name}</span>}
                             </div>
                           </div>
                         </div>

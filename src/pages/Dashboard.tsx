@@ -61,7 +61,8 @@ const Dashboard = () => {
     transactions
       .filter(t => t.type === 'expense' && isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }))
       .forEach(t => {
-        const name = t.categories?.name || 'Uncategorized';
+        const icon = t.categories?.icon || '';
+        const name = (icon ? `${icon} ` : '') + (t.categories?.name || 'Uncategorized');
         cats[name] = (cats[name] || 0) + Number(t.amount);
       });
     return Object.entries(cats).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
@@ -363,7 +364,7 @@ const Dashboard = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{tx.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.categories?.name && <span>{tx.categories.name} · </span>}
+                      {tx.categories?.name && <span>{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories.name} · </span>}
                       {format(parseISO(tx.date), 'MMM d, yyyy')}
                     </p>
                   </div>

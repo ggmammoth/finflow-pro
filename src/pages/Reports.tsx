@@ -76,7 +76,7 @@ const Reports = () => {
               <SelectTrigger className="bg-secondary/50 border-border/60"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t('reports.allCategories')}</SelectItem>
-                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                {categories?.map(c => <SelectItem key={c.id} value={c.id}>{c.icon ? `${c.icon} ` : ''}{c.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -163,7 +163,7 @@ const Reports = () => {
                       <td className="px-6 py-3">
                         <Badge variant={tx.type === 'income' ? 'default' : 'destructive'} className="text-[0.6875rem] capitalize">{t(`dialog.${tx.type}`)}</Badge>
                       </td>
-                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.name || '—'}</td>
+                      <td className="px-6 py-3 text-muted-foreground">{tx.categories?.icon ? `${tx.categories.icon} ` : ''}{tx.categories?.name || '—'}</td>
                       <td className="px-6 py-3 text-muted-foreground">{format(parseISO(tx.date), 'MMM d, yyyy')}</td>
                       <td className={`px-6 py-3 text-right font-bold tabular-nums ${tx.type === 'income' ? 'text-income' : 'text-expense'}`}>
                         {tx.type === 'income' ? '+' : '−'}{fmt(Number(tx.amount))}
