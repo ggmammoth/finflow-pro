@@ -152,7 +152,14 @@ export default function Budgets() {
                           />
                           <Button size="sm" onClick={() => {
                             const val = parseFloat(addMoneyAmount);
-                            if (val > 0) updateGoal.mutate({ id: goal.id, current_amount: goal.current_amount + val });
+                            if (val > 0) {
+                              addMoneyToGoal.mutate({
+                                goalId: goal.id,
+                                goalName: goal.name,
+                                currentAmount: goal.current_amount,
+                                amount: val,
+                              });
+                            }
                             setAddMoneyGoalId(null); setAddMoneyAmount('');
                           }}>{t('common.add')}</Button>
                           <Button size="sm" variant="ghost" onClick={() => { setAddMoneyGoalId(null); setAddMoneyAmount(''); }}>{t('common.cancel')}</Button>
