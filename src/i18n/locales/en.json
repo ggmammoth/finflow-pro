@@ -202,6 +202,8 @@
     "goalCompleted": "Goal completed!",
     "leftToGoal": "{{amount}} left to reach the goal",
     "addMoney": "Add Money",
+    "moneyAdded": "Amount added to goal and deducted from balance",
+    "addMoneyNote": "Savings contribution: {{goal}}",
     "deleteGoalTitle": "Delete savings goal?",
     "deleteGoalDesc": "This action cannot be undone.",
     "addBudget": "Add Budget",
