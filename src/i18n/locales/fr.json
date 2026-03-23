@@ -186,6 +186,8 @@
     "addToGoal": "Ajouter à un objectif d'épargne",
     "selectGoal": "Sélectionner un objectif d'épargne",
     "goalHint": "Cette dépense sera également ajoutée à l'objectif d'épargne sélectionné",
+    "savingsGoalHint": "Choisissez à quel objectif d'épargne attribuer ce montant",
+    "noGoalsAvailable": "Aucun objectif d'épargne disponible",
     "newCategory": "Nouveau",
     "categoryName": "Nom de catégorie"
   },
