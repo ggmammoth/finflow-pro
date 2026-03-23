@@ -186,6 +186,8 @@
     "addToGoal": "Add to Savings Goal",
     "selectGoal": "Select a savings goal",
     "goalHint": "This expense will also be added to the selected savings goal",
+    "savingsGoalHint": "Choose where this saving amount should be assigned",
+    "noGoalsAvailable": "No savings goals available",
     "newCategory": "New",
     "categoryName": "Category name"
   },
