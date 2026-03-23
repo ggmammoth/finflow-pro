@@ -16,6 +16,7 @@ import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
 import Recurring from "./pages/Recurring";
 import Reports from "./pages/Reports";
+import Budgets from "./pages/Budgets";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
