@@ -75,7 +75,56 @@ export function useDeleteSavingsGoal() {
   });
 }
 
-/* ── Category Budgets ── */
+/** Add money to a savings goal AND create a corresponding expense transaction */
+export function useAddMoneyToGoal() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { t } = useTranslation();
+
+  return useMutation({
+    mutationFn: async ({ goalId, goalName, currentAmount, amount }: {
+      goalId: string; goalName: string; currentAmount: number; amount: number;
+    }) => {
+      // 1. Find or use the "Savings" default category
+      const { data: savingsCategory } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('name', 'Savings')
+        .eq('type', 'expense')
+        .limit(1)
+        .single();
+
+      // 2. Update the goal's saved amount
+      const { error: goalErr } = await supabase
+        .from('savings_goals')
+        .update({ current_amount: currentAmount + amount })
+        .eq('id', goalId);
+      if (goalErr) throw goalErr;
+
+      // 3. Create expense transaction
+      const { error: txErr } = await supabase
+        .from('transactions')
+        .insert({
+          user_id: user!.id,
+          type: 'expense',
+          title: `💰 ${goalName}`,
+          amount,
+          date: format(new Date(), 'yyyy-MM-dd'),
+          category_id: savingsCategory?.id ?? null,
+          notes: t('budgets.addMoneyNote', { goal: goalName }),
+        });
+      if (txErr) throw txErr;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['savings_goals'] });
+      qc.invalidateQueries({ queryKey: ['transactions'] });
+      toast({ title: t('budgets.moneyAdded') });
+    },
+    onError: (e: any) => toast({ title: 'Error', description: e.message, variant: 'destructive' }),
+  });
+}
+
 
 export interface CategoryBudget {
   id: string;
