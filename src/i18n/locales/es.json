@@ -5,6 +5,7 @@
     "expenses": "Gastos",
     "recurring": "Recurrentes",
     "budgets": "Presupuestos y Metas",
+    "planning": "Planificación",
     "reports": "Informes",
     "settings": "Ajustes"
   },
@@ -216,6 +217,21 @@
     "exceededBy": "Excedido por {{amount}}",
     "deleteBudgetTitle": "¿Eliminar presupuesto?",
     "deleteBudgetDesc": "Esta acción no se puede deshacer."
+  },
+  "planning": {
+    "title": "Planificación y Calendario",
+    "subtitle": "Visualiza tu cronología financiera y próximos eventos",
+    "addPayday": "Agregar día de pago",
+    "payday": "Día de pago",
+    "dayOfMonth": "{{day}} de cada mes",
+    "dayOfMonthLabel": "Día del mes (1-31)",
+    "paydayLabel": "Etiqueta",
+    "selectDay": "Haz clic en un día para ver detalles",
+    "noTransactionsDay": "Sin transacciones este día",
+    "recurringDue": "Recurrentes pendientes",
+    "upcoming7Days": "Próximos 7 días",
+    "upcomingDesc": "Transacciones programadas y recurrentes",
+    "nothingUpcoming": "Nada programado en los próximos 7 días"
   },
   "categories": {
     "Car": "Coche",

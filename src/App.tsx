@@ -17,6 +17,7 @@ import Expenses from "./pages/Expenses";
 import Recurring from "./pages/Recurring";
 import Reports from "./pages/Reports";
 import Budgets from "./pages/Budgets";
+import Planning from "./pages/Planning";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/recurring" element={<Recurring />} />
               <Route path="/budgets" element={<Budgets />} />
+              <Route path="/planning" element={<Planning />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
             </Route>

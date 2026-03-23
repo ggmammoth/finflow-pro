@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import {
   LayoutDashboard, ArrowDownCircle, ArrowUpCircle, RefreshCw,
-  BarChart3, Settings, TrendingUp, Target,
+  BarChart3, Settings, TrendingUp, Target, CalendarDays,
 } from 'lucide-react';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -17,6 +17,7 @@ const navItems = [
   { titleKey: 'nav.expenses', url: '/expenses', icon: ArrowUpCircle },
   { titleKey: 'nav.recurring', url: '/recurring', icon: RefreshCw },
   { titleKey: 'nav.budgets', url: '/budgets', icon: Target },
+  { titleKey: 'nav.planning', url: '/planning', icon: CalendarDays },
   { titleKey: 'nav.reports', url: '/reports', icon: BarChart3 },
   { titleKey: 'nav.settings', url: '/settings', icon: Settings },
 ];

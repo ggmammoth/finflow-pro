@@ -5,6 +5,7 @@
     "expenses": "Expenses",
     "recurring": "Recurring",
     "budgets": "Budgets & Goals",
+    "planning": "Planning",
     "reports": "Reports",
     "settings": "Settings"
   },
@@ -216,6 +217,21 @@
     "exceededBy": "Exceeded by {{amount}}",
     "deleteBudgetTitle": "Delete budget?",
     "deleteBudgetDesc": "This action cannot be undone."
+  },
+  "planning": {
+    "title": "Planning & Scheduling",
+    "subtitle": "Visualize your financial timeline and upcoming events",
+    "addPayday": "Add Payday",
+    "payday": "Payday",
+    "dayOfMonth": "{{day}}th of each month",
+    "dayOfMonthLabel": "Day of Month (1-31)",
+    "paydayLabel": "Label",
+    "selectDay": "Click a day to see details",
+    "noTransactionsDay": "No transactions on this day",
+    "recurringDue": "Recurring Due",
+    "upcoming7Days": "Next 7 Days",
+    "upcomingDesc": "Scheduled transactions & recurring",
+    "nothingUpcoming": "Nothing scheduled in the next 7 days"
   },
   "categories": {
     "Car": "Car",
