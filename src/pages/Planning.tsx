@@ -19,7 +19,7 @@ import { usePaydays, useCreatePayday, useDeletePayday } from '@/hooks/usePaydays
 import { useCurrency } from '@/hooks/useCurrency';
 import { useCategoryName } from '@/hooks/useCategoryName';
 
-const localeMap: Record<string, Locale> = { en: enUS, de, es, fr, bg };
+const localeMap: Record<string, typeof enUS> = { en: enUS, de, es, fr, bg };
 
 export default function Planning() {
   const { t, i18n } = useTranslation();
