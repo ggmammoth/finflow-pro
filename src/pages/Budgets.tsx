@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { useSavingsGoals, useCreateSavingsGoal, useUpdateSavingsGoal, useDeleteSavingsGoal, useCategoryBudgets, useUpsertCategoryBudget, useDeleteCategoryBudget } from '@/hooks/useBudgetsData';
+import { useSavingsGoals, useCreateSavingsGoal, useUpdateSavingsGoal, useDeleteSavingsGoal, useAddMoneyToGoal, useCategoryBudgets, useUpsertCategoryBudget, useDeleteCategoryBudget } from '@/hooks/useBudgetsData';
 import { useTransactions } from '@/hooks/useFinanceData';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useCategoryName } from '@/hooks/useCategoryName';
@@ -24,6 +24,7 @@ export default function Budgets() {
   const createGoal = useCreateSavingsGoal();
   const updateGoal = useUpdateSavingsGoal();
   const deleteGoal = useDeleteSavingsGoal();
+  const addMoneyToGoal = useAddMoneyToGoal();
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
   const [addMoneyGoalId, setAddMoneyGoalId] = useState<string | null>(null);
@@ -151,7 +152,14 @@ export default function Budgets() {
                           />
                           <Button size="sm" onClick={() => {
                             const val = parseFloat(addMoneyAmount);
-                            if (val > 0) updateGoal.mutate({ id: goal.id, current_amount: goal.current_amount + val });
+                            if (val > 0) {
+                              addMoneyToGoal.mutate({
+                                goalId: goal.id,
+                                goalName: goal.name,
+                                currentAmount: goal.current_amount,
+                                amount: val,
+                              });
+                            }
                             setAddMoneyGoalId(null); setAddMoneyAmount('');
                           }}>{t('common.add')}</Button>
                           <Button size="sm" variant="ghost" onClick={() => { setAddMoneyGoalId(null); setAddMoneyAmount(''); }}>{t('common.cancel')}</Button>

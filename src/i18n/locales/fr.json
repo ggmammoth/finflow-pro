@@ -202,6 +202,8 @@
     "goalCompleted": "Objectif atteint !",
     "leftToGoal": "{{amount}} pour atteindre l'objectif",
     "addMoney": "Ajouter de l'Argent",
+    "moneyAdded": "Montant ajouté à l'objectif et déduit du solde",
+    "addMoneyNote": "Contribution d'épargne : {{goal}}",
     "deleteGoalTitle": "Supprimer l'objectif ?",
     "deleteGoalDesc": "Cette action est irréversible.",
     "addBudget": "Ajouter un Budget",

@@ -202,6 +202,8 @@
     "goalCompleted": "Ziel erreicht!",
     "leftToGoal": "{{amount}} bis zum Ziel",
     "addMoney": "Geld hinzufügen",
+    "moneyAdded": "Betrag zum Ziel hinzugefügt und vom Saldo abgezogen",
+    "addMoneyNote": "Sparbeitrag: {{goal}}",
     "deleteGoalTitle": "Sparziel löschen?",
     "deleteGoalDesc": "Diese Aktion kann nicht rückgängig gemacht werden.",
     "addBudget": "Budget hinzufügen",

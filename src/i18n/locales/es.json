@@ -202,6 +202,8 @@
     "goalCompleted": "¡Meta completada!",
     "leftToGoal": "{{amount}} para alcanzar la meta",
     "addMoney": "Agregar Dinero",
+    "moneyAdded": "Monto agregado a la meta y deducido del saldo",
+    "addMoneyNote": "Contribución de ahorro: {{goal}}",
     "deleteGoalTitle": "¿Eliminar meta de ahorro?",
     "deleteGoalDesc": "Esta acción no se puede deshacer.",
     "addBudget": "Agregar Presupuesto",
