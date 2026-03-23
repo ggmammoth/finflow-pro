@@ -218,6 +218,21 @@
     "deleteBudgetTitle": "Budget löschen?",
     "deleteBudgetDesc": "Diese Aktion kann nicht rückgängig gemacht werden."
   },
+  "planning": {
+    "title": "Planung & Zeitplan",
+    "subtitle": "Visualisieren Sie Ihre finanzielle Zeitleiste und anstehende Ereignisse",
+    "addPayday": "Zahltag hinzufügen",
+    "payday": "Zahltag",
+    "dayOfMonth": "{{day}}. jedes Monats",
+    "dayOfMonthLabel": "Tag des Monats (1-31)",
+    "paydayLabel": "Bezeichnung",
+    "selectDay": "Klicken Sie auf einen Tag für Details",
+    "noTransactionsDay": "Keine Transaktionen an diesem Tag",
+    "recurringDue": "Wiederkehrend fällig",
+    "upcoming7Days": "Nächste 7 Tage",
+    "upcomingDesc": "Geplante Transaktionen & Wiederkehrende",
+    "nothingUpcoming": "Nichts in den nächsten 7 Tagen geplant"
+  },
   "categories": {
     "Car": "Auto",
     "Gas / Fuel": "Benzin / Kraftstoff",
