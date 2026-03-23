@@ -182,7 +182,12 @@
     "monthly": "Mensual",
     "yearly": "Anual",
     "income": "Ingreso",
-    "expense": "Gasto"
+    "expense": "Gasto",
+    "addToGoal": "Añadir a meta de ahorro",
+    "selectGoal": "Seleccionar meta de ahorro",
+    "goalHint": "Este gasto también se añadirá a la meta de ahorro seleccionada",
+    "newCategory": "Nueva",
+    "categoryName": "Nombre de categoría"
   },
   "budgets": {
     "title": "Presupuestos y Metas",

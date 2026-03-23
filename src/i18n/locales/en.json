@@ -182,7 +182,12 @@
     "monthly": "Monthly",
     "yearly": "Yearly",
     "income": "Income",
-    "expense": "Expense"
+    "expense": "Expense",
+    "addToGoal": "Add to Savings Goal",
+    "selectGoal": "Select a savings goal",
+    "goalHint": "This expense will also be added to the selected savings goal",
+    "newCategory": "New",
+    "categoryName": "Category name"
   },
   "budgets": {
     "title": "Budgets & Goals",

@@ -182,7 +182,12 @@
     "monthly": "Mensuel",
     "yearly": "Annuel",
     "income": "Revenu",
-    "expense": "Dépense"
+    "expense": "Dépense",
+    "addToGoal": "Ajouter à un objectif d'épargne",
+    "selectGoal": "Sélectionner un objectif d'épargne",
+    "goalHint": "Cette dépense sera également ajoutée à l'objectif d'épargne sélectionné",
+    "newCategory": "Nouveau",
+    "categoryName": "Nom de catégorie"
   },
   "budgets": {
     "title": "Budgets et Objectifs",
