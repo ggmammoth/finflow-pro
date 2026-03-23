@@ -182,7 +182,12 @@
     "monthly": "Monatlich",
     "yearly": "Jährlich",
     "income": "Einnahme",
-    "expense": "Ausgabe"
+    "expense": "Ausgabe",
+    "addToGoal": "Zum Sparziel hinzufügen",
+    "selectGoal": "Sparziel auswählen",
+    "goalHint": "Diese Ausgabe wird auch dem ausgewählten Sparziel hinzugefügt",
+    "newCategory": "Neu",
+    "categoryName": "Kategoriename"
   },
   "budgets": {
     "title": "Budgets & Ziele",

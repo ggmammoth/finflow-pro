@@ -9,9 +9,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useCategories, useCreateTransaction, useUpdateTransaction, useCreateCategory, Transaction } from '@/hooks/useFinanceData';
-import { Loader2, Plus } from 'lucide-react';
+import { useSavingsGoals, useAddMoneyToGoal } from '@/hooks/useBudgetsData';
+import { Loader2, Plus, Target } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCategoryName } from '@/hooks/useCategoryName';
+import { Switch } from '@/components/ui/switch';
 
 const schema = z.object({
   title: z.string().min(1, 'Title required').max(100),
@@ -35,12 +37,16 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
   const { t } = useTranslation();
   const catLabel = useCategoryName();
   const { data: categories } = useCategories(type);
+  const { data: savingsGoals } = useSavingsGoals();
   const createMutation = useCreateTransaction();
   const updateMutation = useUpdateTransaction();
   const createCategoryMutation = useCreateCategory();
+  const addMoneyToGoalMutation = useAddMoneyToGoal();
   const isEditing = !!editTransaction;
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [isForGoal, setIsForGoal] = useState(false);
+  const [selectedGoalId, setSelectedGoalId] = useState('');
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -66,6 +72,8 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
     }
     setShowNewCategory(false);
     setNewCategoryName('');
+    setIsForGoal(false);
+    setSelectedGoalId('');
   }, [editTransaction, reset, open]);
 
   const handleAddCategory = async () => {
@@ -77,8 +85,26 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
   };
 
   const onSubmit = async (data: FormData) => {
+    const amount = parseFloat(data.amount);
+
+    // If linked to a savings goal, also update the goal
+    if (type === 'expense' && isForGoal && selectedGoalId) {
+      const goal = savingsGoals?.find(g => g.id === selectedGoalId);
+      if (goal) {
+        await addMoneyToGoalMutation.mutateAsync({
+          goalId: goal.id,
+          goalName: goal.name,
+          currentAmount: goal.current_amount,
+          amount,
+        });
+        reset();
+        onOpenChange(false);
+        return;
+      }
+    }
+
     const payload = {
-      type, title: data.title, amount: parseFloat(data.amount), date: data.date,
+      type, title: data.title, amount, date: data.date,
       category_id: data.category_id || null, notes: data.notes || null,
       payment_method: data.payment_method || null, is_recurring: false, recurring_payment_id: null,
     };
@@ -88,10 +114,12 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
     onOpenChange(false);
   };
 
-  const loading = createMutation.isPending || updateMutation.isPending;
+  const loading = createMutation.isPending || updateMutation.isPending || addMoneyToGoalMutation.isPending;
   const dialogTitle = isEditing
     ? (type === 'income' ? t('dialog.editIncome') : t('dialog.editExpense'))
     : (type === 'income' ? t('dialog.addIncome') : t('dialog.addExpense'));
+
+  const activeGoals = savingsGoals?.filter(g => g.current_amount < g.target_amount) || [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -115,47 +143,82 @@ const TransactionDialog: React.FC<Props> = ({ open, onOpenChange, type, editTran
               <Input {...register('date')} type="date" />
             </div>
           </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('common.category')}</Label>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-6 text-xs gap-1 text-primary"
-                onClick={() => setShowNewCategory(!showNewCategory)}
-              >
-                <Plus className="h-3 w-3" />
-                {t('dialog.newCategory', 'New')}
-              </Button>
+
+          {/* Savings Goal toggle – only for expenses, not when editing */}
+          {type === 'expense' && !isEditing && activeGoals.length > 0 && (
+            <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4 text-primary" />
+                  <Label className="text-sm font-medium">{t('dialog.addToGoal')}</Label>
+                </div>
+                <Switch checked={isForGoal} onCheckedChange={setIsForGoal} />
+              </div>
+              {isForGoal && (
+                <>
+                  <Select value={selectedGoalId} onValueChange={setSelectedGoalId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('dialog.selectGoal')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activeGoals.map(g => (
+                        <SelectItem key={g.id} value={g.id}>
+                          {g.icon ? `${g.icon} ` : '🎯 '}{g.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">{t('dialog.goalHint')}</p>
+                </>
+              )}
             </div>
-            {showNewCategory ? (
-              <div className="flex gap-2">
-                <Input
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  placeholder={t('dialog.categoryName', 'Category name')}
-                  className="flex-1"
-                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
-                />
+          )}
+
+          {/* Hide category when linked to goal (will use Savings category automatically) */}
+          {!(isForGoal && selectedGoalId) && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label>{t('common.category')}</Label>
                 <Button
                   type="button"
+                  variant="ghost"
                   size="sm"
-                  onClick={handleAddCategory}
-                  disabled={createCategoryMutation.isPending || !newCategoryName.trim()}
+                  className="h-6 text-xs gap-1 text-primary"
+                  onClick={() => setShowNewCategory(!showNewCategory)}
                 >
-                  {createCategoryMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.add')}
+                  <Plus className="h-3 w-3" />
+                  {t('dialog.newCategory', 'New')}
                 </Button>
               </div>
-            ) : (
-              <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
-                <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
-                <SelectContent>
-                  {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            )}
-          </div>
+              {showNewCategory ? (
+                <div className="flex gap-2">
+                  <Input
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder={t('dialog.categoryName', 'Category name')}
+                    className="flex-1"
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCategory())}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleAddCategory}
+                    disabled={createCategoryMutation.isPending || !newCategoryName.trim()}
+                  >
+                    {createCategoryMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.add')}
+                  </Button>
+                </div>
+              ) : (
+                <Select onValueChange={(v) => setValue('category_id', v)} defaultValue={editTransaction?.category_id || ''}>
+                  <SelectTrigger><SelectValue placeholder={t('dialog.selectCategory')} /></SelectTrigger>
+                  <SelectContent>
+                    {categories?.map(c => <SelectItem key={c.id} value={c.id}>{catLabel(c.name, c.icon)}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          )}
+
           {type === 'expense' && (
             <div className="space-y-2">
               <Label>{t('dialog.paymentMethod')}</Label>
