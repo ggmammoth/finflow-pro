@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import {
   LayoutDashboard, ArrowDownCircle, ArrowUpCircle, RefreshCw,
-  BarChart3, Settings, TrendingUp, Target,
+  BarChart3, Settings, TrendingUp, Target, CalendarDays,
 } from 'lucide-react';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
