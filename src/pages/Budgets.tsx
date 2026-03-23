@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { useSavingsGoals, useCreateSavingsGoal, useUpdateSavingsGoal, useDeleteSavingsGoal, useCategoryBudgets, useUpsertCategoryBudget, useDeleteCategoryBudget } from '@/hooks/useBudgetsData';
+import { useSavingsGoals, useCreateSavingsGoal, useUpdateSavingsGoal, useDeleteSavingsGoal, useAddMoneyToGoal, useCategoryBudgets, useUpsertCategoryBudget, useDeleteCategoryBudget } from '@/hooks/useBudgetsData';
 import { useTransactions } from '@/hooks/useFinanceData';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useCategoryName } from '@/hooks/useCategoryName';
