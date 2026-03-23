@@ -17,6 +17,7 @@ const navItems = [
   { titleKey: 'nav.expenses', url: '/expenses', icon: ArrowUpCircle },
   { titleKey: 'nav.recurring', url: '/recurring', icon: RefreshCw },
   { titleKey: 'nav.budgets', url: '/budgets', icon: Target },
+  { titleKey: 'nav.planning', url: '/planning', icon: CalendarDays },
   { titleKey: 'nav.reports', url: '/reports', icon: BarChart3 },
   { titleKey: 'nav.settings', url: '/settings', icon: Settings },
 ];
