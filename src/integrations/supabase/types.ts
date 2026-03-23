@@ -85,6 +85,30 @@ export type Database = {
           },
         ]
       }
+      paydays: {
+        Row: {
+          created_at: string
+          day_of_month: number
+          id: string
+          label: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_month: number
+          id?: string
+          label?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_month?: number
+          id?: string
+          label?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
