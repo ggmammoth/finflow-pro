@@ -24,6 +24,7 @@ export default function Budgets() {
   const createGoal = useCreateSavingsGoal();
   const updateGoal = useUpdateSavingsGoal();
   const deleteGoal = useDeleteSavingsGoal();
+  const addMoneyToGoal = useAddMoneyToGoal();
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
   const [addMoneyGoalId, setAddMoneyGoalId] = useState<string | null>(null);
