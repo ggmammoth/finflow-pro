@@ -1,6 +1,7 @@
 {
   "nav": {
     "dashboard": "Tableau de bord",
+    "transactions": "Transactions",
     "income": "Revenus",
     "expenses": "Dépenses",
     "recurring": "Récurrents",
@@ -114,6 +115,20 @@
   },
   "transactions": {
     "searchPlaceholder": "Rechercher des transactions...",
+    "all": "Tous",
+    "incomeLabel": "Revenus",
+    "expenseLabel": "Dépenses",
+    "incomeTag": "Revenu",
+    "expenseTag": "Dépense",
+    "pageSubtitle": "Tous vos revenus et dépenses en un seul endroit",
+    "addTransaction": "Ajouter une transaction",
+    "totalTransactions": "Transactions",
+    "sortLatest": "Plus récent",
+    "sortOldest": "Plus ancien",
+    "sortHighest": "Montant le plus élevé",
+    "sortLowest": "Montant le plus bas",
+    "noIncomeYet": "Pas encore de revenus",
+    "noExpensesYet": "Pas encore de dépenses",
     "noMatching": "Aucune transaction correspondante",
     "noTransactionsYet": "Aucune transaction {{type}} pour l'instant",
     "addFirst": "Ajoutez votre premier {{type}}",

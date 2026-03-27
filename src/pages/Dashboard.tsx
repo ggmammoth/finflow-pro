@@ -341,14 +341,9 @@ const Dashboard = () => {
               <CardDescription className="text-xs">{t('dashboard.latestActivity')}</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Link to="/income">
-                <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-income/20 text-income hover:bg-income-light hover:text-income">
-                  <ArrowDownCircle className="h-3 w-3" /> {t('nav.income')}
-                </Button>
-              </Link>
-              <Link to="/expenses">
-                <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-expense/20 text-expense hover:bg-expense-light hover:text-expense">
-                  <ArrowUpCircle className="h-3 w-3" /> {t('nav.expenses')}
+              <Link to="/transactions">
+                <Button variant="outline" size="sm" className="h-7 gap-1.5 text-xs border-primary/20 text-primary hover:bg-accent">
+                  {t('common.viewAll')}
                 </Button>
               </Link>
             </div>
@@ -383,8 +378,7 @@ const Dashboard = () => {
               <p className="mt-3 text-sm font-medium text-muted-foreground">{t('dashboard.noTransactions')}</p>
               <p className="mt-1 text-xs text-muted-foreground/70">{t('dashboard.addTransactionsHint')}</p>
               <div className="mt-4 flex gap-2">
-                <Link to="/income"><Button size="sm" className="h-8 text-xs">{t('dashboard.addIncome')}</Button></Link>
-                <Link to="/expenses"><Button size="sm" variant="outline" className="h-8 text-xs">{t('dashboard.addExpense')}</Button></Link>
+                <Link to="/transactions"><Button size="sm" className="h-8 text-xs">{t('nav.transactions', 'Transactions')}</Button></Link>
               </div>
             </div>
           )}
