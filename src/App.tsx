@@ -51,9 +51,9 @@ const App = () => (
               <Route path="/planning" element={<Planning />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/family" element={<Family />} />
-              <Route path="/family/members" element={<FamilyMembers />} />
+              <Route path="/family/members" element={<Navigate to="/family?tab=members" replace />} />
               <Route path="/family/child" element={<ChildDashboard />} />
-              <Route path="/family/settings" element={<FamilySettings />} />
+              <Route path="/family/settings" element={<Navigate to="/family?tab=settings" replace />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

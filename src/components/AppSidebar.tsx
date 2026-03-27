@@ -29,19 +29,10 @@ export function AppSidebar() {
   const { t } = useTranslation();
   const { hasFamily, isOwner, isAdult, isChild } = useFamilyRole();
 
-  // Build nav items dynamically
-  const navItems = [...baseNavItems];
-
-  // Family section
+  // Family section — single entry
   navItems.push({ titleKey: 'nav.family', url: '/family', icon: Users });
-  if (hasFamily && !isChild) {
-    navItems.push({ titleKey: 'nav.familyMembers', url: '/family/members', icon: Users });
-  }
   if (hasFamily && isChild) {
     navItems.push({ titleKey: 'nav.childDashboard', url: '/family/child', icon: Baby });
-  }
-  if (hasFamily && isOwner) {
-    navItems.push({ titleKey: 'nav.familySettings', url: '/family/settings', icon: Shield });
   }
 
   navItems.push({ titleKey: 'nav.settings', url: '/settings', icon: Settings });
