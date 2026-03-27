@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           color: string | null
           created_at: string
+          family_space_id: string | null
           icon: string | null
           id: string
           is_default: boolean | null
@@ -28,6 +29,7 @@ export type Database = {
         Insert: {
           color?: string | null
           created_at?: string
+          family_space_id?: string | null
           icon?: string | null
           id?: string
           is_default?: boolean | null
@@ -38,6 +40,7 @@ export type Database = {
         Update: {
           color?: string | null
           created_at?: string
+          family_space_id?: string | null
           icon?: string | null
           id?: string
           is_default?: boolean | null
@@ -45,13 +48,22 @@ export type Database = {
           type?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       category_budgets: {
         Row: {
           budget_amount: number
           category_id: string
           created_at: string
+          family_space_id: string | null
           id: string
           month: string
           updated_at: string
@@ -61,6 +73,7 @@ export type Database = {
           budget_amount: number
           category_id: string
           created_at?: string
+          family_space_id?: string | null
           id?: string
           month: string
           updated_at?: string
@@ -70,6 +83,7 @@ export type Database = {
           budget_amount?: number
           category_id?: string
           created_at?: string
+          family_space_id?: string | null
           id?: string
           month?: string
           updated_at?: string
@@ -81,6 +95,214 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "category_budgets_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      child_allowances: {
+        Row: {
+          amount: number
+          auto_recurring: boolean
+          child_member_id: string
+          created_at: string
+          created_by_user_id: string
+          family_space_id: string
+          frequency: string
+          id: string
+          next_due_date: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          auto_recurring?: boolean
+          child_member_id: string
+          created_at?: string
+          created_by_user_id: string
+          family_space_id: string
+          frequency: string
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          auto_recurring?: boolean
+          child_member_id?: string
+          created_at?: string
+          created_by_user_id?: string
+          family_space_id?: string
+          frequency?: string
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_allowances_child_member_id_fkey"
+            columns: ["child_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "child_allowances_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_invitations: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          family_space_id: string
+          id: string
+          invited_by: string
+          invited_email: string
+          role_to_assign: string
+          status: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          family_space_id: string
+          id?: string
+          invited_by: string
+          invited_email: string
+          role_to_assign: string
+          status?: string
+          token: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          family_space_id?: string
+          id?: string
+          invited_by?: string
+          invited_email?: string
+          role_to_assign?: string
+          status?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_invitations_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_members: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          family_space_id: string
+          id: string
+          is_active: boolean
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          family_space_id: string
+          id?: string
+          is_active?: boolean
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          family_space_id?: string
+          id?: string
+          is_active?: boolean
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_members_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_spaces: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      goal_contributions: {
+        Row: {
+          amount: number
+          contributed_by_user_id: string
+          contribution_date: string
+          created_at: string
+          goal_id: string
+          id: string
+          note: string | null
+        }
+        Insert: {
+          amount: number
+          contributed_by_user_id: string
+          contribution_date?: string
+          created_at?: string
+          goal_id: string
+          id?: string
+          note?: string | null
+        }
+        Update: {
+          amount?: number
+          contributed_by_user_id?: string
+          contribution_date?: string
+          created_at?: string
+          goal_id?: string
+          id?: string
+          note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_contributions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "savings_goals"
             referencedColumns: ["id"]
           },
         ]
@@ -200,9 +422,12 @@ export type Database = {
           created_at: string
           current_amount: number
           deadline: string | null
+          family_space_id: string | null
+          goal_type: string
           icon: string | null
           id: string
           name: string
+          owner_member_id: string | null
           target_amount: number
           updated_at: string
           user_id: string
@@ -211,9 +436,12 @@ export type Database = {
           created_at?: string
           current_amount?: number
           deadline?: string | null
+          family_space_id?: string | null
+          goal_type?: string
           icon?: string | null
           id?: string
           name: string
+          owner_member_id?: string | null
           target_amount: number
           updated_at?: string
           user_id: string
@@ -222,60 +450,93 @@ export type Database = {
           created_at?: string
           current_amount?: number
           deadline?: string | null
+          family_space_id?: string | null
+          goal_type?: string
           icon?: string | null
           id?: string
           name?: string
+          owner_member_id?: string | null
           target_amount?: number
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "savings_goals_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "savings_goals_owner_member_id_fkey"
+            columns: ["owner_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transactions: {
         Row: {
           amount: number
           category_id: string | null
           created_at: string
+          created_by_user_id: string | null
           date: string
+          family_space_id: string | null
           id: string
           is_recurring: boolean | null
           notes: string | null
           payment_method: string | null
           recurring_payment_id: string | null
+          related_child_member_id: string | null
+          related_goal_id: string | null
           title: string
           type: string
           updated_at: string
           user_id: string
+          visibility: string
         }
         Insert: {
           amount: number
           category_id?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           date?: string
+          family_space_id?: string | null
           id?: string
           is_recurring?: boolean | null
           notes?: string | null
           payment_method?: string | null
           recurring_payment_id?: string | null
+          related_child_member_id?: string | null
+          related_goal_id?: string | null
           title: string
           type: string
           updated_at?: string
           user_id: string
+          visibility?: string
         }
         Update: {
           amount?: number
           category_id?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           date?: string
+          family_space_id?: string | null
           id?: string
           is_recurring?: boolean | null
           notes?: string | null
           payment_method?: string | null
           recurring_payment_id?: string | null
+          related_child_member_id?: string | null
+          related_goal_id?: string | null
           title?: string
           type?: string
           updated_at?: string
           user_id?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -292,6 +553,27 @@ export type Database = {
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "transactions_family_space_id_fkey"
+            columns: ["family_space_id"]
+            isOneToOne: false
+            referencedRelation: "family_spaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_related_child_member_id_fkey"
+            columns: ["related_child_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_related_goal_id_fkey"
+            columns: ["related_goal_id"]
+            isOneToOne: false
+            referencedRelation: "savings_goals"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -299,7 +581,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_child_member_id_for_user: {
+        Args: { _family_space_id: string; _user_id: string }
+        Returns: string
+      }
+      get_family_role: {
+        Args: { _family_space_id: string; _user_id: string }
+        Returns: string
+      }
+      get_user_family_space_id: { Args: { _user_id: string }; Returns: string }
+      is_family_adult_or_owner: {
+        Args: { _family_space_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_family_member: {
+        Args: { _family_space_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
