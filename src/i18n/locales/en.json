@@ -1,6 +1,7 @@
 {
   "nav": {
     "dashboard": "Dashboard",
+    "transactions": "Transactions",
     "income": "Income",
     "expenses": "Expenses",
     "recurring": "Recurring",
@@ -114,6 +115,20 @@
   },
   "transactions": {
     "searchPlaceholder": "Search transactions...",
+    "all": "All",
+    "incomeLabel": "Income",
+    "expenseLabel": "Expenses",
+    "incomeTag": "Income",
+    "expenseTag": "Expense",
+    "pageSubtitle": "All your income and expenses in one place",
+    "addTransaction": "Add Transaction",
+    "totalTransactions": "Transactions",
+    "sortLatest": "Latest",
+    "sortOldest": "Oldest",
+    "sortHighest": "Highest",
+    "sortLowest": "Lowest",
+    "noIncomeYet": "No income transactions yet",
+    "noExpensesYet": "No expense transactions yet",
     "noMatching": "No matching transactions",
     "noTransactionsYet": "No {{type}} transactions yet",
     "addFirst": "Add your first {{type}}",
