@@ -103,21 +103,82 @@ export function useInviteFamilyMember() {
   const qc = useQueryClient();
   const { user } = useAuth();
   const { familySpaceId } = useFamilyRole();
+  const { data: familySpace } = useFamilySpace();
   const { toast } = useToast();
   return useMutation({
     mutationFn: async ({ email, role }: { email: string; role: 'adult' | 'child' }) => {
       const token = crypto.randomUUID();
-      const { error } = await supabase
+      const invitationPayload = {
+        family_space_id: familySpaceId!,
+        invited_email: email,
+        role_to_assign: role,
+        token,
+        invited_by: user!.id,
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      };
+
+      console.info('[FamilyInvite] Creating invitation', {
+        invited_email: invitationPayload.invited_email,
+        role_to_assign: invitationPayload.role_to_assign,
+        family_space_id: invitationPayload.family_space_id,
+        invited_by: invitationPayload.invited_by,
+        token: invitationPayload.token,
+      });
+
+      const { data: invitation, error } = await supabase
         .from('family_invitations')
-        .insert({
-          family_space_id: familySpaceId!,
-          invited_email: email,
-          role_to_assign: role,
-          token,
-          invited_by: user!.id,
-          expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        .insert(invitationPayload)
+        .select('id, invited_email, token, family_space_id, invited_by, expires_at')
+        .single();
+
+      if (error || !invitation) {
+        console.error('[FamilyInvite] Invitation insert failed', {
+          error,
+          payload: invitationPayload,
         });
-      if (error) throw error;
+        throw error ?? new Error('Invitation insert failed');
+      }
+
+      console.info('[FamilyInvite] Invitation created', invitation);
+
+      const inviteLink = `${window.location.origin}/accept-invite?token=${encodeURIComponent(token)}`;
+      const emailPayload = {
+        templateName: 'family-invitation',
+        recipientEmail: invitation.invited_email,
+        idempotencyKey: `family-invitation-${invitation.id}`,
+        templateData: {
+          inviteLink,
+          role,
+          familyName: familySpace?.name ?? 'Family',
+          inviterEmail: user?.email ?? '',
+          expiresAt: invitation.expires_at,
+        },
+      };
+
+      console.info('[FamilyInvite] Triggering invitation email', {
+        recipientEmail: emailPayload.recipientEmail,
+        templateName: emailPayload.templateName,
+        idempotencyKey: emailPayload.idempotencyKey,
+      });
+
+      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-transactional-email', {
+        body: emailPayload,
+      });
+
+      if (emailError) {
+        console.error('[FamilyInvite] Email trigger failed', {
+          error: emailError,
+          recipientEmail: emailPayload.recipientEmail,
+          invitationId: invitation.id,
+        });
+        throw new Error(emailError.message || 'Invitation email sending failed');
+      }
+
+      console.info('[FamilyInvite] Email queued successfully', {
+        invitationId: invitation.id,
+        response: emailData,
+      });
+
       return token;
     },
     onSuccess: () => {
