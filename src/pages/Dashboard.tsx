@@ -105,8 +105,33 @@ const Dashboard = () => {
         </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-stagger">
+      {/* Hero Balance Card */}
+      <Card className={`card-premium relative overflow-hidden border-2 ${monthlyData.balance >= 0 ? 'border-income/30' : 'border-expense/30'}`}>
+        <div className={`absolute inset-0 ${monthlyData.balance >= 0 ? 'bg-gradient-to-br from-income/5 via-transparent to-income/3' : 'bg-gradient-to-br from-expense/5 via-transparent to-expense/3'}`} />
+        <CardContent className="relative flex flex-col items-center justify-center py-10 sm:py-12">
+          <div className="flex items-center gap-2 mb-3">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${monthlyData.balance >= 0 ? 'bg-income-light' : 'bg-expense-light'}`}>
+              <Wallet className={`h-5 w-5 ${monthlyData.balance >= 0 ? 'text-income' : 'text-expense'}`} />
+            </div>
+            <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.balance', 'Баланс')}</span>
+          </div>
+          <p className={`font-display text-5xl sm:text-6xl font-bold tracking-tight ${monthlyData.balance >= 0 ? 'text-income' : 'text-expense'}`}>
+            {monthlyData.balance >= 0 ? '+' : '−'}{fmt(Math.abs(monthlyData.balance))}
+          </p>
+          <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+            {monthlyData.balance >= 0 ? <TrendingUp className="h-4 w-4 text-income" /> : <TrendingDown className="h-4 w-4 text-expense" />}
+            <span>{t('common.thisMonth')}</span>
+            {monthlyData.income > 0 && (
+              <Badge variant="secondary" className="ml-1 text-xs">
+                {t('dashboard.savingsRate')} {Math.round((monthlyData.balance / monthlyData.income) * 100)}%
+              </Badge>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Sub Cards */}
+      <div className="grid gap-4 sm:grid-cols-3 animate-stagger">
         <Card className="card-premium stat-card-income bg-card">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -135,24 +160,6 @@ const Dashboard = () => {
             <div className="mt-2 flex items-center gap-1">
               <TrendingDown className="h-3 w-3 text-expense" />
               <span className="text-xs text-muted-foreground">{t('common.thisMonth')}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="card-premium stat-card-balance bg-card">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.netBalance')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
-                <Wallet className="h-4 w-4 text-primary" />
-              </div>
-            </div>
-            <p className={`mt-3 font-display text-2xl font-bold tracking-tight ${monthlyData.balance >= 0 ? 'text-income' : 'text-expense'}`}>
-              {monthlyData.balance >= 0 ? '+' : '−'}{fmt(Math.abs(monthlyData.balance))}
-            </p>
-            <div className="mt-2 flex items-center gap-1">
-              {monthlyData.balance >= 0 ? <TrendingUp className="h-3 w-3 text-income" /> : <TrendingDown className="h-3 w-3 text-expense" />}
-              <span className="text-xs text-muted-foreground">{t('dashboard.savingsRate')} {monthlyData.income > 0 ? Math.round((monthlyData.balance / monthlyData.income) * 100) : 0}%</span>
             </div>
           </CardContent>
         </Card>
