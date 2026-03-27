@@ -56,7 +56,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <span className="font-display text-base font-bold tracking-tight text-sidebar-accent-foreground">
-              CashFlow
+              MoneyBloom
             </span>
           )}
         </div>
