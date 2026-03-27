@@ -700,6 +700,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      get_auth_email: { Args: { _user_id: string }; Returns: string }
       get_child_member_id_for_user: {
         Args: { _family_space_id: string; _user_id: string }
         Returns: string
