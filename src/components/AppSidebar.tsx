@@ -15,8 +15,7 @@ import { useFamilyRole } from '@/hooks/useFamilyRole';
 
 const baseNavItems = [
   { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { titleKey: 'nav.income', url: '/income', icon: ArrowDownCircle },
-  { titleKey: 'nav.expenses', url: '/expenses', icon: ArrowUpCircle },
+  { titleKey: 'nav.transactions', url: '/transactions', icon: ArrowUpCircle },
   { titleKey: 'nav.recurring', url: '/recurring', icon: RefreshCw },
   { titleKey: 'nav.budgets', url: '/budgets', icon: Target },
   { titleKey: 'nav.planning', url: '/planning', icon: CalendarDays },
