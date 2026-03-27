@@ -4,14 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from '@/components/NavLink';
 import {
   LayoutDashboard, ArrowDownCircle, ArrowUpCircle, RefreshCw,
-  BarChart3, Settings, TrendingUp, Target, CalendarDays,
+  BarChart3, Settings, TrendingUp, Target, CalendarDays, Users,
+  Baby, Shield,
 } from 'lucide-react';
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from '@/components/ui/sidebar';
+import { useFamilyRole } from '@/hooks/useFamilyRole';
 
-const navItems = [
+const baseNavItems = [
   { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
   { titleKey: 'nav.income', url: '/income', icon: ArrowDownCircle },
   { titleKey: 'nav.expenses', url: '/expenses', icon: ArrowUpCircle },
@@ -19,7 +21,6 @@ const navItems = [
   { titleKey: 'nav.budgets', url: '/budgets', icon: Target },
   { titleKey: 'nav.planning', url: '/planning', icon: CalendarDays },
   { titleKey: 'nav.reports', url: '/reports', icon: BarChart3 },
-  { titleKey: 'nav.settings', url: '/settings', icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -27,6 +28,24 @@ export function AppSidebar() {
   const collapsed = state === 'collapsed';
   const location = useLocation();
   const { t } = useTranslation();
+  const { hasFamily, isOwner, isAdult, isChild } = useFamilyRole();
+
+  // Build nav items dynamically
+  const navItems = [...baseNavItems];
+
+  // Family section
+  navItems.push({ titleKey: 'nav.family', url: '/family', icon: Users });
+  if (hasFamily && !isChild) {
+    navItems.push({ titleKey: 'nav.familyMembers', url: '/family/members', icon: Users });
+  }
+  if (hasFamily && isChild) {
+    navItems.push({ titleKey: 'nav.childDashboard', url: '/family/child', icon: Baby });
+  }
+  if (hasFamily && isOwner) {
+    navItems.push({ titleKey: 'nav.familySettings', url: '/family/settings', icon: Shield });
+  }
+
+  navItems.push({ titleKey: 'nav.settings', url: '/settings', icon: Settings });
 
   return (
     <Sidebar collapsible="icon">

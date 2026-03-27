@@ -20,6 +20,10 @@ import Budgets from "./pages/Budgets";
 import Planning from "./pages/Planning";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Family from "./pages/Family";
+import FamilyMembers from "./pages/FamilyMembers";
+import ChildDashboard from "./pages/ChildDashboard";
+import FamilySettings from "./pages/FamilySettings";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +48,10 @@ const App = () => (
               <Route path="/budgets" element={<Budgets />} />
               <Route path="/planning" element={<Planning />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/family" element={<Family />} />
+              <Route path="/family/members" element={<FamilyMembers />} />
+              <Route path="/family/child" element={<ChildDashboard />} />
+              <Route path="/family/settings" element={<FamilySettings />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
