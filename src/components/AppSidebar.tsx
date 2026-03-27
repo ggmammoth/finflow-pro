@@ -29,6 +29,8 @@ export function AppSidebar() {
   const { t } = useTranslation();
   const { hasFamily, isOwner, isAdult, isChild } = useFamilyRole();
 
+  const navItems = [...baseNavItems];
+
   // Family section — single entry
   navItems.push({ titleKey: 'nav.family', url: '/family', icon: Users });
   if (hasFamily && isChild) {
