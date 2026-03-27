@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { t } = useTranslation();
 
@@ -27,7 +28,8 @@ const Login = () => {
     if (error) {
       toast({ title: t('auth.loginFailed'), description: error.message, variant: 'destructive' });
     } else {
-      navigate('/dashboard');
+      const redirectTo = searchParams.get('redirect') || '/dashboard';
+      navigate(redirectTo);
     }
   };
 
