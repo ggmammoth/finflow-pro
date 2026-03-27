@@ -23,6 +23,7 @@ import Family from "./pages/Family";
 import FamilyMembers from "./pages/FamilyMembers";
 import ChildDashboard from "./pages/ChildDashboard";
 import FamilySettings from "./pages/FamilySettings";
+import AcceptInvite from "./pages/AcceptInvite";
 
 import { Navigate } from "react-router-dom";
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/accept-invite" element={<AcceptInvite />} />
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/transactions" element={<Transactions />} />

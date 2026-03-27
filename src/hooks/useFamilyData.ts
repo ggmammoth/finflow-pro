@@ -141,7 +141,8 @@ export function useInviteFamilyMember() {
 
       console.info('[FamilyInvite] Invitation created', invitation);
 
-      const inviteLink = `${window.location.origin}/accept-invite?token=${encodeURIComponent(token)}`;
+      const appUrl = import.meta.env.VITE_APP_URL || 'https://moneybloom.me';
+      const inviteLink = `${appUrl}/accept-invite?token=${encodeURIComponent(token)}`;
       const emailPayload = {
         templateName: 'family-invitation',
         recipientEmail: invitation.invited_email,

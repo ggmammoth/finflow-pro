@@ -69,7 +69,7 @@ export const template = {
     `You’ve been invited to ${data.familyName ? `${data.familyName} on ` : ''}MoneyBloom`,
   displayName: 'Family invitation',
   previewData: {
-    inviteLink: 'https://shine-coin.lovable.app/accept-invite?token=example-token',
+    inviteLink: 'https://moneybloom.me/accept-invite?token=example-token',
     role: 'adult',
     familyName: 'MoneyBloom Family',
     inviterEmail: 'owner@moneybloom.me',
