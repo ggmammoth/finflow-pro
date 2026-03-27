@@ -60,11 +60,11 @@
     "featureRecurringDesc": "Never miss a bill. Track subscriptions and recurring payments.",
     "featureSecurity": "Secure & Private",
     "featureSecurityDesc": "Encrypted and protected. Only you access your data.",
-    "footer": "© {{year}} CashFlow. All rights reserved."
+    "footer": "© {{year}} MoneyBloom. All rights reserved."
   },
   "auth": {
     "welcomeBack": "Welcome back",
-    "signInDesc": "Sign in to your CashFlow account",
+    "signInDesc": "Sign in to your MoneyBloom account",
     "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account?",
     "createAccount": "Create account",
@@ -109,7 +109,7 @@
     "trackBills": "Track bills & subscriptions",
     "noExpensesMonth": "No expenses this month",
     "addTxToSee": "Add transactions to see comparison",
-    "startAddingCashFlow": "Start adding transactions to see cash flow",
+    "startAddingMoneyBloom": "Start adding transactions to see cash flow",
     "loadingFinances": "Loading your finances..."
   },
   "transactions": {

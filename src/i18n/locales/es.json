@@ -60,11 +60,11 @@
     "featureRecurringDesc": "Nunca pierdas una factura. Rastrea suscripciones y pagos recurrentes.",
     "featureSecurity": "Seguro y privado",
     "featureSecurityDesc": "Cifrado y protegido. Solo tú accedes a tus datos.",
-    "footer": "© {{year}} CashFlow. Todos los derechos reservados."
+    "footer": "© {{year}} MoneyBloom. Todos los derechos reservados."
   },
   "auth": {
     "welcomeBack": "Bienvenido de nuevo",
-    "signInDesc": "Inicia sesión en tu cuenta CashFlow",
+    "signInDesc": "Inicia sesión en tu cuenta MoneyBloom",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "noAccount": "¿No tienes cuenta?",
     "createAccount": "Crear cuenta",
@@ -109,7 +109,7 @@
     "trackBills": "Rastrea facturas y suscripciones",
     "noExpensesMonth": "Sin gastos este mes",
     "addTxToSee": "Agrega transacciones para ver la comparación",
-    "startAddingCashFlow": "Agrega transacciones para ver el flujo de caja",
+    "startAddingMoneyBloom": "Agrega transacciones para ver el flujo de caja",
     "loadingFinances": "Cargando tus finanzas..."
   },
   "transactions": {

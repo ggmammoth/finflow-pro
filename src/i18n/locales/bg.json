@@ -60,11 +60,11 @@
     "featureRecurringDesc": "Никога не пропускай сметка. Проследявай абонаменти и повтарящи се плащания.",
     "featureSecurity": "Сигурно и поверително",
     "featureSecurityDesc": "Криптирано и защитено. Само ти имаш достъп до данните си.",
-    "footer": "© {{year}} CashFlow. Всички права запазени."
+    "footer": "© {{year}} MoneyBloom. Всички права запазени."
   },
   "auth": {
     "welcomeBack": "Добре дошъл отново",
-    "signInDesc": "Влез в акаунта си в CashFlow",
+    "signInDesc": "Влез в акаунта си в MoneyBloom",
     "forgotPassword": "Забравена парола?",
     "noAccount": "Нямаш акаунт?",
     "createAccount": "Създай акаунт",
@@ -109,7 +109,7 @@
     "trackBills": "Проследявай сметки и абонаменти",
     "noExpensesMonth": "Няма разходи този месец",
     "addTxToSee": "Добави транзакции, за да видиш сравнение",
-    "startAddingCashFlow": "Добави транзакции, за да видиш паричния поток",
+    "startAddingMoneyBloom": "Добави транзакции, за да видиш паричния поток",
     "loadingFinances": "Зареждане на финансите..."
   },
   "transactions": {
