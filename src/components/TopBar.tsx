@@ -21,6 +21,7 @@ const languages = [
   { code: 'ro', label: 'Română', flag: '🇷🇴' },
   { code: 'ru', label: 'Русский', flag: '🇷🇺' },
   { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'pl', label: 'Polski', flag: '🇵🇱' },
 ];
 
 const TopBar: React.FC = () => {
