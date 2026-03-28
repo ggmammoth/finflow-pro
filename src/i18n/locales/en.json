@@ -343,6 +343,9 @@
     "invitationsDesc": "Manage pending and past invitations",
     "noInvitations": "No invitations sent yet",
     "roleAssign": "Role",
-    "ownerOnly": "Only the family owner can access settings"
+    "ownerOnly": "Only the family owner can access settings",
+    "editMember": "Edit Member",
+    "displayName": "Display Name",
+    "displayNamePlaceholder": "e.g. Detelina"
   }
 }
