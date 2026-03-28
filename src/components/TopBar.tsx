@@ -9,19 +9,20 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
+import ReactCountryFlag from 'react-country-flag';
 
 const languages = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'bg', label: 'Български', flag: '🇧🇬' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'pt', label: 'Português', flag: '🇵🇹' },
-  { code: 'ro', label: 'Română', flag: '🇷🇴' },
-  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
-  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
-  { code: 'pl', label: 'Polski', flag: '🇵🇱' },
+  { code: 'en', label: 'English', countryCode: 'GB' },
+  { code: 'bg', label: 'Български', countryCode: 'BG' },
+  { code: 'de', label: 'Deutsch', countryCode: 'DE' },
+  { code: 'es', label: 'Español', countryCode: 'ES' },
+  { code: 'fr', label: 'Français', countryCode: 'FR' },
+  { code: 'it', label: 'Italiano', countryCode: 'IT' },
+  { code: 'pl', label: 'Polski', countryCode: 'PL' },
+  { code: 'pt', label: 'Português', countryCode: 'PT' },
+  { code: 'ro', label: 'Română', countryCode: 'RO' },
+  { code: 'ru', label: 'Русский', countryCode: 'RU' },
+  { code: 'tr', label: 'Türkçe', countryCode: 'TR' },
 ];
 
 const TopBar: React.FC = () => {
@@ -60,8 +61,12 @@ const TopBar: React.FC = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-1.5 h-9 px-2.5 text-muted-foreground hover:text-foreground">
               <Globe className="h-4 w-4" />
-              <span className="hidden sm:inline text-xs font-medium">{currentLang.flag} {currentLang.label}</span>
-              <span className="sm:hidden text-sm">{currentLang.flag}</span>
+              <span className="hidden sm:inline text-xs font-medium">
+                <ReactCountryFlag countryCode={currentLang.countryCode} svg style={{ width: '1em', height: '1em' }} /> {currentLang.label}
+              </span>
+              <span className="sm:hidden">
+                <ReactCountryFlag countryCode={currentLang.countryCode} svg style={{ width: '1.1em', height: '1.1em' }} />
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48 max-h-80 overflow-y-auto animate-in fade-in-0 slide-in-from-top-2 duration-200">
@@ -73,7 +78,7 @@ const TopBar: React.FC = () => {
                   onClick={() => i18n.changeLanguage(lang.code)}
                   className={`flex items-center gap-2.5 cursor-pointer transition-colors ${isActive ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-secondary'}`}
                 >
-                  <span className="text-base leading-none">{lang.flag}</span>
+                  <ReactCountryFlag countryCode={lang.countryCode} svg style={{ width: '1.2em', height: '1.2em' }} />
                   <span className="flex-1">{lang.label}</span>
                   {isActive && <Check className="h-3.5 w-3.5 text-primary" />}
                 </DropdownMenuItem>
