@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, ChevronDown, Globe, Moon, Sun } from 'lucide-react';
+import { LogOut, User, ChevronDown, Globe, Moon, Sun, Check } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -12,10 +12,15 @@ import { useTheme } from '@/hooks/useTheme';
 
 const languages = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
 ];
 
 const TopBar: React.FC = () => {
@@ -58,17 +63,21 @@ const TopBar: React.FC = () => {
               <span className="sm:hidden text-sm">{currentLang.flag}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            {languages.map(lang => (
-              <DropdownMenuItem
-                key={lang.code}
-                onClick={() => i18n.changeLanguage(lang.code)}
-                className={i18n.language === lang.code ? 'bg-secondary font-medium' : ''}
-              >
-                <span className="mr-2">{lang.flag}</span>
-                {lang.label}
-              </DropdownMenuItem>
-            ))}
+          <DropdownMenuContent align="end" className="w-48 max-h-80 overflow-y-auto animate-in fade-in-0 slide-in-from-top-2 duration-200">
+            {languages.map(lang => {
+              const isActive = i18n.language === lang.code;
+              return (
+                <DropdownMenuItem
+                  key={lang.code}
+                  onClick={() => i18n.changeLanguage(lang.code)}
+                  className={`flex items-center gap-2.5 cursor-pointer transition-colors ${isActive ? 'bg-primary/10 font-medium text-primary' : 'hover:bg-secondary'}`}
+                >
+                  <span className="text-base leading-none">{lang.flag}</span>
+                  <span className="flex-1">{lang.label}</span>
+                  {isActive && <Check className="h-3.5 w-3.5 text-primary" />}
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
 
