@@ -11,6 +11,7 @@ import pt from './locales/pt.json';
 import ro from './locales/ro.json';
 import ru from './locales/ru.json';
 import tr from './locales/tr.json';
+import pl from './locales/pl.json';
 
 i18n
   .use(LanguageDetector)
@@ -27,6 +28,7 @@ i18n
       ro: { translation: ro },
       ru: { translation: ru },
       tr: { translation: tr },
+      pl: { translation: pl },
     },
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
