@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { Users, Plus, PiggyBank, TrendingUp, ArrowUpCircle, Target, Shield, User, Baby, Settings, Mail } from 'lucide-react';
+import { Users, Plus, PiggyBank, TrendingUp, ArrowUpCircle, Target, Shield, User, Baby, Settings, Mail, Pencil } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +14,7 @@ import CreateFamilyDialog from '@/components/family/CreateFamilyDialog';
 import FamilySummaryCards from '@/components/family/FamilySummaryCards';
 import InviteFamilyMemberDialog from '@/components/family/InviteFamilyMemberDialog';
 import AllowanceDialog from '@/components/family/AllowanceDialog';
+import EditMemberDialog from '@/components/family/EditMemberDialog';
 
 const roleIcons: Record<string, React.ReactNode> = {
   owner: <Shield className="h-4 w-4" />,
@@ -52,6 +53,8 @@ export default function Family() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [allowanceOpen, setAllowanceOpen] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editMember, setEditMember] = useState<{ id: string; display_name: string | null; role: string } | null>(null);
 
   const now = new Date();
   const monthStart = format(startOfMonth(now), 'yyyy-MM-dd');
@@ -225,7 +228,7 @@ export default function Family() {
               return (
                 <Card key={member.id}>
                   <CardContent className="p-5">
-                    <div className="flex items-start justify-between mb-3">
+                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
                           {roleIcons[member.role]}
@@ -237,6 +240,11 @@ export default function Family() {
                           </Badge>
                         </div>
                       </div>
+                      {isOwner && (
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setEditMember(member); setEditOpen(true); }}>
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                      )}
                     </div>
                     {member.role === 'child' && isOwner && (
                       <div className="mt-3 pt-3 border-t border-border">
@@ -319,6 +327,11 @@ export default function Family() {
         onOpenChange={setAllowanceOpen}
         childMemberId={selectedChildId}
         existingAllowance={allowances.find((a: any) => a.child_member_id === selectedChildId) ?? null}
+      />
+      <EditMemberDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        member={editMember}
       />
     </div>
   );

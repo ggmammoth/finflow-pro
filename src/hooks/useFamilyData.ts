@@ -232,6 +232,25 @@ export function useAcceptFamilyInvite() {
   });
 }
 
+/* ── Update Family Member ── */
+
+export function useUpdateFamilyMember() {
+  const qc = useQueryClient();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async ({ id, ...data }: { id: string; display_name?: string; role?: string }) => {
+      const { error } = await supabase.from('family_members').update(data).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['family_members'] });
+      qc.invalidateQueries({ queryKey: ['family_membership'] });
+      toast({ title: 'Member updated!' });
+    },
+    onError: (e: any) => toast({ title: 'Error', description: e.message, variant: 'destructive' }),
+  });
+}
+
 /* ── Child Allowances ── */
 
 export function useChildAllowances(childMemberId?: string) {
