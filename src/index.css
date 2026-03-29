@@ -204,15 +204,28 @@
   }
 
   .stat-card-income {
-    border-left: 3px solid hsl(var(--income));
+    border-left: 3px solid hsl(var(--income) / 0.7);
   }
   .stat-card-expense {
-    border-left: 3px solid hsl(var(--expense));
+    border-left: 3px solid hsl(var(--expense) / 0.7);
   }
   .stat-card-balance {
-    border-left: 3px solid hsl(var(--primary));
+    border-left: 3px solid hsl(var(--primary) / 0.7);
   }
   .stat-card-recurring {
+    border-left: 3px solid hsl(var(--recurring) / 0.7);
+  }
+
+  .dark .stat-card-income {
+    border-left: 3px solid hsl(var(--income));
+  }
+  .dark .stat-card-expense {
+    border-left: 3px solid hsl(var(--expense));
+  }
+  .dark .stat-card-balance {
+    border-left: 3px solid hsl(var(--primary));
+  }
+  .dark .stat-card-recurring {
     border-left: 3px solid hsl(var(--recurring));
   }
 
