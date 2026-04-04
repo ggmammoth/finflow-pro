@@ -28,11 +28,13 @@ const Dashboard = () => {
   const monthEnd = endOfMonth(now);
 
   const monthlyData = useMemo(() => {
-    if (!transactions) return { income: 0, expenses: 0, balance: 0 };
+    if (!transactions) return { income: 0, expenses: 0, balance: 0, totalBalance: 0 };
     const monthTx = transactions.filter(t => isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }));
     const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
     const expenses = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
-    return { income, expenses, balance: income - expenses };
+    const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
+    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
+    return { income, expenses, balance: income - expenses, totalBalance: totalIncome - totalExpenses };
   }, [transactions, monthStart, monthEnd]);
 
   const upcomingRecurring = useMemo(() => {
@@ -106,24 +108,24 @@ const Dashboard = () => {
       </div>
 
       {/* Hero Balance Card */}
-      <Card className={`card-premium relative overflow-hidden border-2 ${monthlyData.balance >= 0 ? 'border-income/30' : 'border-expense/30'}`}>
-        <div className={`absolute inset-0 ${monthlyData.balance >= 0 ? 'bg-gradient-to-br from-income/5 via-transparent to-income/3' : 'bg-gradient-to-br from-expense/5 via-transparent to-expense/3'}`} />
+      <Card className={`card-premium relative overflow-hidden border-2 ${monthlyData.totalBalance >= 0 ? 'border-income/30' : 'border-expense/30'}`}>
+        <div className={`absolute inset-0 ${monthlyData.totalBalance >= 0 ? 'bg-gradient-to-br from-income/5 via-transparent to-income/3' : 'bg-gradient-to-br from-expense/5 via-transparent to-expense/3'}`} />
         <CardContent className="relative flex flex-col items-center justify-center py-10 sm:py-12">
           <div className="flex items-center gap-2 mb-3">
-            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${monthlyData.balance >= 0 ? 'bg-income-light' : 'bg-expense-light'}`}>
-              <Wallet className={`h-5 w-5 ${monthlyData.balance >= 0 ? 'text-income' : 'text-expense'}`} />
+            <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${monthlyData.totalBalance >= 0 ? 'bg-income-light' : 'bg-expense-light'}`}>
+              <Wallet className={`h-5 w-5 ${monthlyData.totalBalance >= 0 ? 'text-income' : 'text-expense'}`} />
             </div>
             <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('dashboard.balance', 'Баланс')}</span>
           </div>
-          <p className={`font-display text-5xl sm:text-6xl font-bold tracking-tight ${monthlyData.balance >= 0 ? 'text-income' : 'text-expense'}`}>
-            {monthlyData.balance >= 0 ? '+' : '−'}{fmt(Math.abs(monthlyData.balance))}
+          <p className={`font-display text-5xl sm:text-6xl font-bold tracking-tight ${monthlyData.totalBalance >= 0 ? 'text-income' : 'text-expense'}`}>
+            {monthlyData.totalBalance >= 0 ? '+' : '−'}{fmt(Math.abs(monthlyData.totalBalance))}
           </p>
           <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-            {monthlyData.balance >= 0 ? <TrendingUp className="h-4 w-4 text-income" /> : <TrendingDown className="h-4 w-4 text-expense" />}
-            <span>{t('common.thisMonth')}</span>
+            {monthlyData.totalBalance >= 0 ? <TrendingUp className="h-4 w-4 text-income" /> : <TrendingDown className="h-4 w-4 text-expense" />}
+            <span>{t('dashboard.netBalance')}</span>
             {monthlyData.income > 0 && (
               <Badge variant="secondary" className="ml-1 text-xs">
-                {t('dashboard.savingsRate')} {Math.round((monthlyData.balance / monthlyData.income) * 100)}%
+                {t('common.thisMonth')}: {monthlyData.balance >= 0 ? '+' : '−'}{fmt(Math.abs(monthlyData.balance))}
               </Badge>
             )}
           </div>
