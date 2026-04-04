@@ -28,11 +28,13 @@ const Dashboard = () => {
   const monthEnd = endOfMonth(now);
 
   const monthlyData = useMemo(() => {
-    if (!transactions) return { income: 0, expenses: 0, balance: 0 };
+    if (!transactions) return { income: 0, expenses: 0, balance: 0, totalBalance: 0 };
     const monthTx = transactions.filter(t => isWithinInterval(parseISO(t.date), { start: monthStart, end: monthEnd }));
     const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
     const expenses = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
-    return { income, expenses, balance: income - expenses };
+    const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
+    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
+    return { income, expenses, balance: income - expenses, totalBalance: totalIncome - totalExpenses };
   }, [transactions, monthStart, monthEnd]);
 
   const upcomingRecurring = useMemo(() => {
